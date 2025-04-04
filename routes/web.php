@@ -3,12 +3,24 @@
 use App\Http\Controllers\EquipamentosController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\EmprestimosController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 // Página inicial ou rota principal
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+
+
+
+Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 
 // Rotas para Equipamentos
 Route::get('equipamentos', [EquipamentosController::class, 'index'])->name('equipamentos.index');
