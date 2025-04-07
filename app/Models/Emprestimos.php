@@ -12,7 +12,7 @@ class Emprestimos extends Model
     protected $table = 'emprestimos';
     protected $fillable = [
         'equipamento_id',
-        'usuario_id',
+        'user_id',
         'data_emprestimo',
         'data_devolucao_prevista',
         'data_devolucao_real',
@@ -24,8 +24,8 @@ class Emprestimos extends Model
         return $this->belongsTo(Equipamentos::class, 'equipamento_id');
     }
 
-    public function usuario()
+    public function user()
     {
-        return $this->belongsTo(Usuarios::class, 'usuario_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

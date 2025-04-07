@@ -17,6 +17,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    protected $table = 'users';
     protected $fillable = [
         'name',
         'email',
@@ -32,6 +33,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function emprestimos()
+    {
+        return $this->hasMany(Emprestimos::class, 'user_id');
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -45,4 +50,5 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
 }

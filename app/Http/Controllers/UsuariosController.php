@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuarios;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class UsuariosController extends Controller
 {
@@ -12,7 +15,7 @@ class UsuariosController extends Controller
      */
     public function index()
     {
-        $usuarios = Usuarios::all();
+        $usuarios = User::all();
         return view('usuarios.index', compact('usuarios'));
     }
 
@@ -29,19 +32,19 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-        // Validação dos dados do usuário
         $request->validate([
-            'nome' => 'required|string|max:255',
-            'email' => 'required|email|unique:usuarios,email', // Garante que o email seja único
-            'senha' => 'required|min:6|confirmed', // Garante que a senha tenha confirmação
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Criação do novo usuário
-        $usuario = Usuarios::create([
-            'nome' => $request->nome,
+        $user = User::create([
+            'name' => $request->name,
             'email' => $request->email,
-            'senha' => bcrypt($request->senha),  // Criptografa a senha
+            'password' => Hash::make($request->password),
         ]);
+
+        event(new Registered($user));
 
         // Após salvar, redireciona para outra página (por exemplo, para a lista de usuários)
         return redirect()->route('usuarios.index')->with('success', 'Usuário cadastrado com sucesso!');
@@ -52,7 +55,7 @@ class UsuariosController extends Controller
      */
     public function show($id)
     {
-        $usuario = Usuarios::find($id); // Encontra o usuário pelo ID
+        $usuario = User::find($id); // Encontra o usuário pelo ID
         return view('usuarios.show', compact('usuario')); // Exibe a view com os detalhes do usuário
     }
 
@@ -61,7 +64,7 @@ class UsuariosController extends Controller
      */
     public function edit($id)
     {
-        $usuario = Usuarios::find($id); // Encontra o usuário pelo ID
+        $usuario = User::find($id); // Encontra o usuário pelo ID
         return view('usuarios.edit', compact('usuario')); // Passa o usuário para a view de edição
     }
 
@@ -78,7 +81,7 @@ class UsuariosController extends Controller
     ]);
 
     // Encontra o usuário no banco
-    $usuario = Usuarios::find($id);
+    $usuario = User::find($id);
 
     if (!$usuario) {
         return redirect()->route('usuarios.index')->with('error', 'Usuário não encontrado.');
@@ -102,7 +105,7 @@ class UsuariosController extends Controller
      */
     public function destroy($id)
     {
-        $usuario = Usuarios::find($id);
+        $usuario = User::find($id);
         $usuario->delete();
 
         return redirect()->route('usuarios.index');

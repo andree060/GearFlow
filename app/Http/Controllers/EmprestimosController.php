@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Emprestimos;
 use App\Models\Equipamentos;
-use App\Models\Usuarios;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EmprestimosController extends Controller
@@ -14,9 +14,24 @@ class EmprestimosController extends Controller
      */
     public function index()
     {
-        $emprestimos = Emprestimos::all();
+        // Pegando todos os empréstimos e verificando se o status precisa ser alterado
+        $emprestimos = Emprestimos::all()->map(function ($emprestimo) {
+            // Se a data de devolução prevista já passou e o empréstimo ainda não foi devolvido, o status é "expirado"
+            if (strtotime($emprestimo->data_devolucao_prevista) < time() && is_null($emprestimo->data_devolucao_real)) {
+                $emprestimo->status = 'expirado';
+            } else {
+                // Caso contrário, o status é "ativo"
+                $emprestimo->status = 'ativo';
+            }
+
+            return $emprestimo;
+        });
+
         return view('emprestimos.index', compact('emprestimos'));
     }
+
+    // O resto do controlador permanece o mesmo...
+
 
     /**
      * Show the form for creating a new resource.
@@ -25,7 +40,7 @@ class EmprestimosController extends Controller
     {
         // Pegando todos os equipamentos e usuários
         $equipamentos = Equipamentos::all();  // Aqui você pega todos os equipamentos
-        $usuarios = Usuarios::all();  // Aqui você pega todos os usuários
+        $usuarios = User::all();  // Aqui você pega todos os usuários
         return view('emprestimos.create', compact('equipamentos', 'usuarios'));  // Passando para a view
     }
 
@@ -38,7 +53,7 @@ class EmprestimosController extends Controller
         // Validação dos dados
         $request->validate([
             'equipamento_id' => 'required|exists:equipamentos,id',
-            'usuario_id' => 'required|exists:usuarios,id',
+            'user_id' => 'required|exists:users,id',
             'data_emprestimo' => 'required|date',
             'data_devolucao_prevista' => 'required|date|after:data_emprestimo',
         ]);
@@ -46,7 +61,7 @@ class EmprestimosController extends Controller
         // Criação do empréstimo
         Emprestimos::create([
             'equipamento_id' => $request->equipamento_id,
-            'usuario_id' => $request->usuario_id,
+            'user_id' => $request->user_id,
             'data_emprestimo' => $request->data_emprestimo,
             'data_devolucao_prevista' => $request->data_devolucao_prevista,
             'status' => 'ativo'
@@ -71,7 +86,7 @@ class EmprestimosController extends Controller
     {
         $emprestimo = Emprestimos::findOrFail($id); // Encontrar o empréstimo pelo ID ou retornar erro 404
         $equipamentos = Equipamentos::all(); // Obter todos os equipamentos
-        $usuarios = Usuarios::all(); // Obter todos os usuários
+        $usuarios = User::all(); // Obter todos os usuários
         return view('emprestimos.edit', compact('emprestimo', 'equipamentos', 'usuarios')); // Passar dados para a view
     }
 
@@ -80,7 +95,7 @@ class EmprestimosController extends Controller
         // Validação dos dados do empréstimo
         $request->validate([
             'equipamento_id' => 'required|exists:equipamentos,id',
-            'usuario_id' => 'required|exists:usuarios,id',
+            'user_id' => 'required|exists:users,id',
             'data_emprestimo' => 'required|date',
             'data_devolucao_prevista' => 'required|date|after:data_emprestimo',
         ]);
@@ -89,7 +104,7 @@ class EmprestimosController extends Controller
         $emprestimo = Emprestimos::findOrFail($id);
         $emprestimo->update([
             'equipamento_id' => $request->equipamento_id,
-            'usuario_id' => $request->usuario_id,
+            'user_id' => $request->user_id,
             'data_emprestimo' => $request->data_emprestimo,
             'data_devolucao_prevista' => $request->data_devolucao_prevista,
         ]);

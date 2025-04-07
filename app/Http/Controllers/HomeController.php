@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Emprestimos;
 use App\Models\Equipamentos;
-use App\Models\Usuarios;
+use App\Models\User;
 
 class HomeController extends Controller
 {
@@ -12,7 +12,7 @@ class HomeController extends Controller
     {
         // Pegando os dados para a tela inicial
         $totalEquipamentos = Equipamentos::count();
-        $totalUsuarios = Usuarios::count();
+        $totalUsuarios = User::count();
         $totalEmprestimos = Emprestimos::count();
         $totalEmprestimosAtivos = Emprestimos::whereNull('data_devolucao_real')->count();
 

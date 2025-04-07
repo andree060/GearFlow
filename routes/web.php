@@ -1,21 +1,33 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EquipamentosController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\EmprestimosController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\HomeController;
-use Illuminate\Support\Facades\Route;
 
-// Página inicial ou rota principal
+
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('usuarios', [UsuariosController::class, 'index'])->name('usuarios.index');
 });
 
 
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('/relatorio', [RelatorioController::class, 'index'])->name('relatorio.index');
 
 
 
@@ -32,7 +44,7 @@ Route::put('equipamentos/{id}', [EquipamentosController::class, 'update'])->name
 Route::delete('equipamentos/{id}', [EquipamentosController::class, 'destroy'])->name('equipamentos.destroy'); // Exclui o equipamento
 
 // Rotas para Usuários
-Route::get('usuarios', [UsuariosController::class, 'index'])->name('usuarios.index');
+
 Route::get('usuarios/create', [UsuariosController::class, 'create'])->name('usuarios.create');
 Route::post('usuarios', [UsuariosController::class, 'store'])->name('usuarios.store');
 Route::get('usuarios/{id}', [UsuariosController::class, 'show'])->name('usuarios.show'); // Exibe detalhes do usuário
@@ -48,3 +60,6 @@ Route::get('emprestimos/{id}', [EmprestimosController::class, 'show'])->name('em
 Route::get('emprestimos/{id}/edit', [EmprestimosController::class, 'edit'])->name('emprestimos.edit'); // Editar empréstimo
 Route::put('emprestimos/{id}', [EmprestimosController::class, 'update'])->name('emprestimos.update'); // Atualiza o empréstimo
 Route::delete('emprestimos/{id}', [EmprestimosController::class, 'destroy'])->name('emprestimos.destroy'); // Exclui o empréstimo
+
+
+require __DIR__.'/auth.php';
