@@ -17,7 +17,6 @@
     <div class="container mt-5">
         <div class="card shadow-sm">
             <div class="card-body">
-                <!-- Título com cor azul -->
                 <h1 class="text-center mb-4 text-primary">Cadastrar Empréstimo</h1>
 
                 <!-- Exibição de mensagens de erro do Laravel -->
@@ -28,6 +27,13 @@
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
+                    </div>
+                @endif
+
+                <!-- Exibição de mensagens de erro para equipamento já emprestado -->
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
                     </div>
                 @endif
 

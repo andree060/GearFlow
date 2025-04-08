@@ -62,4 +62,5 @@ Route::put('emprestimos/{id}', [EmprestimosController::class, 'update'])->name('
 Route::delete('emprestimos/{id}', [EmprestimosController::class, 'destroy'])->name('emprestimos.destroy'); // Exclui o empréstimo
 
 
+
 require __DIR__.'/auth.php';

@@ -12,7 +12,7 @@ class EquipamentosController extends Controller
      */
     public function index()
     {
-        $equipamentos = Equipamentos::all();
+        $equipamentos = Equipamentos::all(); // Busca todos os equipamentos
         return view('equipamentos.index', compact('equipamentos'));
     }
 
@@ -33,12 +33,13 @@ class EquipamentosController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'numero_serie' => 'required|string',
-            'status' => 'required|string|max:20',
+            'status' => 'required|string|in:disponível,emprestado,indisponível', // Verifique se o status é válido
         ]);
 
         // Criação do equipamento
         Equipamentos::create($request->all());
 
+        // Redireciona para a lista de equipamentos
         return redirect()->route('equipamentos.index');
     }
 
@@ -60,26 +61,29 @@ class EquipamentosController extends Controller
         return view('equipamentos.edit', compact('equipamento')); // Passa o equipamento para a view
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, $id)
     {
         // Validação dos dados do equipamento
         $request->validate([
             'nome' => 'required|string|max:255',
             'numero_serie' => 'required|string|max:100',
-            'status' => 'required|string|in:disponível,emprestado', // Verifique os status válidos no seu sistema
+            'status' => 'required|string|in:disponível,emprestado,indisponível', // Verifique os status válidos no seu sistema
         ]);
 
         // Encontrar e atualizar o equipamento
         $equipamento = Equipamentos::findOrFail($id);
         $equipamento->update([
-        'nome' => $request->nome,
-        'numero_serie' => $request->numero_serie,
-        'status' => $request->status,
+            'nome' => $request->nome,
+            'numero_serie' => $request->numero_serie,
+            'status' => $request->status,  // Atualiza o status conforme o valor enviado
         ]);
 
-    // Redireciona para a página de detalhes do equipamento com uma mensagem de sucesso
+        // Redireciona para a página de detalhes do equipamento com uma mensagem de sucesso
         return redirect()->route('equipamentos.show', $equipamento->id)
-                     ->with('success', 'Equipamento atualizado com sucesso!');
+                         ->with('success', 'Equipamento atualizado com sucesso!');
     }
 
     /**

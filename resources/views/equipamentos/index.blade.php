@@ -1,29 +1,21 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Equipamentos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .alert-custom {
-            display: none;
-            font-size: 16px;
-        }
-    </style>
-</head>
-<body class="bg-light">
+@extends('layouts.app')
 
-    <!-- Título da página com cor personalizada -->
-    <div class="bg-primary text-white text-center py-4">
-        <h1 class="mb-0">Lista de Equipamentos</h1>
-    </div>
-
+@section('content')
     <div class="container mt-5">
+        <h1 class="text-center mb-4 font-weight-bold" style="font-size: 3rem; color: #343a40; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);">
+            Lista de Equipamentos
+        </h1>
+
+        <!-- Mensagem de Alerta de Sucesso -->
+        @if(session('success'))
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+            </div>
+        @endif
 
         <!-- Tabela de Equipamentos -->
         <div class="table-responsive">
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped table-hover shadow-sm rounded-3">
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
@@ -36,22 +28,34 @@
                 <tbody>
                     @foreach($equipamentos as $equipamento)
                         <tr>
-                            <td>{{ $equipamento->id }}</td>
-                            <td>{{ $equipamento->nome }}</td>
-                            <td>{{ $equipamento->numero_serie }}</td>
-                            <td>{{ $equipamento->status }}</td>
-                            <td>
-                                <!-- Botões Visualizar, Editar e Excluir -->
+                            <td class="align-middle">{{ $equipamento->id }}</td>
+                            <td class="align-middle">{{ $equipamento->nome }}</td>
+                            <td class="align-middle">{{ $equipamento->numero_serie }}</td>
+                            <td class="align-middle">
+                                <span class="badge {{ strtolower($equipamento->status) == 'disponível' ? 'bg-success' : (strtolower($equipamento->status) == 'emprestado' ? 'bg-warning' : 'bg-danger') }} badge-custom">
+                                    @if(strtolower($equipamento->status) == 'disponível')
+                                        <i class="fas fa-check-circle"></i> Disponível
+                                    @elseif(strtolower($equipamento->status) == 'emprestado')
+                                        <i class="fas fa-hand-holding"></i> Emprestado
+                                    @else
+                                        <i class="fas fa-times-circle"></i> Indisponível
+                                    @endif
+                                </span>
+                            </td>
+                            <td class="align-middle">
                                 <div class="d-flex flex-column gap-2">
-                                    <!-- Botão Visualizar -->
-                                    <a href="{{ route('equipamentos.show', $equipamento->id) }}" class="btn btn-info w-100">Visualizar</a>
-                                    <!-- Botão Editar -->
-                                    <a href="{{ route('equipamentos.edit', $equipamento->id) }}" class="btn btn-warning w-100" onclick="return confirmEdit()">Editar</a>
-                                    <!-- Formulário Excluir -->
+                                    <a href="{{ route('equipamentos.show', $equipamento->id) }}" class="btn btn-info w-100 shadow-sm rounded-pill text-white">
+                                        <i class="fas fa-eye"></i> Visualizar
+                                    </a>
+                                    <a href="{{ route('equipamentos.edit', $equipamento->id) }}" class="btn btn-warning w-100 shadow-sm rounded-pill text-white" onclick="return confirmEdit()">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
                                     <form action="{{ route('equipamentos.destroy', $equipamento->id) }}" method="POST" class="d-inline" onsubmit="return confirmDelete()">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger w-100">Excluir</button>
+                                        <button type="submit" class="btn btn-danger w-100 shadow-sm rounded-pill text-white">
+                                            <i class="fas fa-trash-alt"></i> Excluir
+                                        </button>
                                     </form>
                                 </div>
                             </td>
@@ -61,24 +65,20 @@
             </table>
         </div>
 
-        <!-- Botão Voltar -->
         <div class="d-flex justify-content-end mt-3">
-            <a href="{{ route('home.index') }}" class="btn btn-secondary">Voltar</a>
+            <a href="{{ route('home.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill">Voltar</a>
         </div>
-
     </div>
+@endsection
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@section('scripts')
     <script>
-        // Função para confirmar a exclusão de um equipamento
         function confirmDelete() {
             return confirm('Tem certeza que deseja excluir este equipamento?');
         }
 
-        // Função para confirmar se o usuário deseja editar o equipamento
         function confirmEdit() {
             return confirm('Tem certeza que deseja editar este equipamento?');
         }
     </script>
-</body>
-</html>
+@endsection

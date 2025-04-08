@@ -4,7 +4,7 @@
     <!-- Título da página com design moderno -->
     <div class="container mt-5">
         <h1 class="text-center mb-4 font-weight-bold" style="font-size: 3rem; color: #343a40; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);">
-            Detalhes do Empréstimo
+            Detalhes do Usuário
         </h1>
 
         <!-- Mensagem de Sucesso -->
@@ -14,35 +14,29 @@
             </div>
         @endif
 
-        <!-- Card com os detalhes do empréstimo -->
+        <!-- Cartão com os detalhes do usuário -->
         <div class="card shadow-sm rounded-3">
             <div class="card-body">
                 <!-- Tabela de Detalhes -->
                 <table class="table table-striped table-bordered">
                     <tr>
-                        <th>Equipamento</th>
-                        <td>{{ $emprestimo->equipamento->nome }}</td>
+                        <th>Nome</th>
+                        <td>{{ $usuario->name }}</td>
                     </tr>
                     <tr>
-                        <th>Usuário</th>
-                        <td>{{ $emprestimo->user->name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Data do Empréstimo</th>
-                        <td>{{ \Carbon\Carbon::parse($emprestimo->data_emprestimo)->format('d/m/Y') }}</td>
-                    </tr>
-                    <tr>
-                        <th>Data de Devolução Prevista</th>
-                        <td>{{ \Carbon\Carbon::parse($emprestimo->data_devolucao_prevista)->format('d/m/Y') }}</td>
+                        <th>Email</th>
+                        <td>{{ $usuario->email }}</td>
                     </tr>
                 </table>
-                
+
+                <!-- Botões de Ação -->
                 <div class="d-flex justify-content-start gap-2">
-                    <!-- Botões Editar e Voltar -->
-                    <a href="{{ route('emprestimos.edit', $emprestimo->id) }}" class="btn btn-warning w-auto shadow-sm rounded-pill text-white">
+                    <!-- Botão Editar -->
+                    <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-warning w-auto shadow-sm rounded-pill text-white">
                         <i class="fas fa-edit"></i> Editar
                     </a>
-                    <a href="{{ route('emprestimos.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill">
+                    <!-- Botão Voltar -->
+                    <a href="{{ route('usuarios.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill">
                         <i class="fas fa-arrow-left"></i> Voltar
                     </a>
                 </div>

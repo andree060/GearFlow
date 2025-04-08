@@ -24,8 +24,10 @@ class RelatorioController extends Controller
 
         // Pegando o número de equipamentos
         $totalEquipamentos = Equipamentos::count();
+
+        // Usando whereIn para garantir que todos os possíveis status de 'em empréstimo' sejam contemplados
         $totalEquipamentosDisponiveis = Equipamentos::where('status', 'disponível')->count();
-        $totalEquipamentosEmEmprestimo = Equipamentos::where('status', 'em empréstimo')->count();
+        $totalEquipamentosEmEmprestimo = Equipamentos::whereIn('status', ['em empréstimo', 'emprestado'])->count(); // Garantindo que diferentes valores sejam considerados
         $totalEquipamentosIndisponiveis = Equipamentos::where('status', 'indisponível')->count();
 
         // Pegando o número de usuários
@@ -43,4 +45,3 @@ class RelatorioController extends Controller
         ));
     }
 }
-

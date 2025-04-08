@@ -16,7 +16,7 @@ class Emprestimos extends Model
         'data_emprestimo',
         'data_devolucao_prevista',
         'data_devolucao_real',
-        'status'
+        'data_devolucao'
     ];
 
     public function equipamento()

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->date('data_emprestimo');
             $table->date('data_devolucao_prevista');
             $table->date('data_devolucao_real')->nullable();
-            $table->string('status', 100);
             $table->timestamps();
         });
     }

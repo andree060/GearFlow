@@ -72,32 +72,32 @@ class UsuariosController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-{
-    // Validação dos dados do usuário
-    $request->validate([
-        'nome' => 'required|string|max:255',
-        'email' => 'required|email|unique:usuarios,email,' . $id, // Garante que o email seja único, ignorando o próprio ID
-        'senha' => 'nullable|min:6|confirmed', // Senha é opcional no update, mas se for informada, deve ser confirmada
-    ]);
-
-    // Encontra o usuário no banco
-    $usuario = User::find($id);
-
-    if (!$usuario) {
-        return redirect()->route('usuarios.index')->with('error', 'Usuário não encontrado.');
+    {
+        // Validação dos dados do usuário
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id, // Garante que o email seja único, ignorando o próprio ID
+            'password' => 'nullable|min:6|confirmed', // Senha é opcional no update, mas se for informada, deve ser confirmada
+        ]);
+    
+        // Encontra o usuário no banco
+        $usuario = User::find($id);
+    
+        if (!$usuario) {
+            return redirect()->route('usuarios.index')->with('error', 'Usuário não encontrado.');
+        }
+    
+        // Atualiza os dados do usuário
+        $usuario->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password ? Hash::make($request->password) : $usuario->password, // Se a senha foi informada, atualiza
+        ]);
+    
+        // Redireciona para a página de detalhes do usuário com uma mensagem de sucesso
+        return redirect()->route('usuarios.show', ['id' => $usuario->id])
+                         ->with('success', 'Usuário atualizado com sucesso!');
     }
-
-    // Atualiza os dados do usuário
-    $usuario->update([
-        'nome' => $request->nome,
-        'email' => $request->email,
-        'senha' => $request->senha ? bcrypt($request->senha) : $usuario->senha, // Se a senha foi informada, atualiza
-    ]);
-
-    // Redireciona para a página de detalhes do usuário com uma mensagem de sucesso
-    return redirect()->route('usuarios.show', ['id' => $usuario->id])
-                     ->with('success', 'Usuário atualizado com sucesso!');
-}
 
 
     /**

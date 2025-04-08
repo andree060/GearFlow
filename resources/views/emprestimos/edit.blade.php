@@ -46,11 +46,11 @@
 
                     <!-- Usuário -->
                     <div class="mb-3">
-                        <label for="usuario_id" class="form-label">Usuário</label>
-                        <select name="usuario_id" id="usuario_id" class="form-select" required>
+                        <label for="user_id" class="form-label">Usuário</label>
+                        <select name="user_id" id="user_id" class="form-select" required>
                             @foreach($usuarios as $usuario)
                                 <option value="{{ $usuario->id }}" {{ $emprestimo->usuario_id == $usuario->id ? 'selected' : '' }}>
-                                    {{ $usuario->nome }}
+                                    {{ $usuario->name }}
                                 </option>
                             @endforeach
                         </select>

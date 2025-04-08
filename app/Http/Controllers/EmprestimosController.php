@@ -16,13 +16,6 @@ class EmprestimosController extends Controller
     {
         // Pegando todos os empréstimos e verificando se o status precisa ser alterado
         $emprestimos = Emprestimos::all()->map(function ($emprestimo) {
-            // Se a data de devolução prevista já passou e o empréstimo ainda não foi devolvido, o status é "expirado"
-            if (strtotime($emprestimo->data_devolucao_prevista) < time() && is_null($emprestimo->data_devolucao_real)) {
-                $emprestimo->status = 'expirado';
-            } else {
-                // Caso contrário, o status é "ativo"
-                $emprestimo->status = 'ativo';
-            }
 
             return $emprestimo;
         });
@@ -50,25 +43,33 @@ class EmprestimosController extends Controller
      */
     public function store(Request $request)
     {
-        // Validação dos dados
-        $request->validate([
-            'equipamento_id' => 'required|exists:equipamentos,id',
-            'user_id' => 'required|exists:users,id',
-            'data_emprestimo' => 'required|date',
-            'data_devolucao_prevista' => 'required|date|after:data_emprestimo',
-        ]);
+        // Verificar se o equipamento já está emprestado
+        $equipamentoId = $request->input('equipamento_id');
+        $equipamentoEmprestado = Equipamentos::find($equipamentoId);
+        // Se o equipamento estiver emprestado, retorna um erro
+        if ($equipamentoEmprestado->status == 'Indisponível') {
+            return redirect()->back()->with('error', 'Este equipamento já está emprestado para outro usuário.');
+        }
 
-        // Criação do empréstimo
-        Emprestimos::create([
-            'equipamento_id' => $request->equipamento_id,
-            'user_id' => $request->user_id,
-            'data_emprestimo' => $request->data_emprestimo,
-            'data_devolucao_prevista' => $request->data_devolucao_prevista,
-            'status' => 'ativo'
-        ]);
+        // Lógica para criar o empréstimo
+        $emprestimo = new Emprestimos();
+        $emprestimo->equipamento_id = $request->input('equipamento_id');
+        $emprestimo->user_id = $request->input('user_id');
+        $emprestimo->data_emprestimo = $request->input('data_emprestimo');
+        $emprestimo->data_devolucao_prevista = $request->input('data_devolucao_prevista');
+        $emprestimo->save();
 
-        return redirect()->route('emprestimos.index');
+        $equipamento_id = $emprestimo->equipamento_id;
+
+        $equipamento = Equipamentos::find($equipamento_id);
+        $equipamento->status = 'Indisponível';
+        $equipamento->update();
+
+
+        // Redireciona para a lista de empréstimos com sucesso
+        return redirect()->route('emprestimos.index')->with('success', 'Empréstimo cadastrado com sucesso!');
     }
+
 
     /**
      * Display the specified resource.
@@ -92,27 +93,37 @@ class EmprestimosController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validação dos dados do empréstimo
-        $request->validate([
-            'equipamento_id' => 'required|exists:equipamentos,id',
-            'user_id' => 'required|exists:users,id',
-            'data_emprestimo' => 'required|date',
-            'data_devolucao_prevista' => 'required|date|after:data_emprestimo',
-        ]);
-
-        // Encontrar o empréstimo pelo ID
+        // Encontre o empréstimo
         $emprestimo = Emprestimos::findOrFail($id);
-        $emprestimo->update([
-            'equipamento_id' => $request->equipamento_id,
-            'user_id' => $request->user_id,
-            'data_emprestimo' => $request->data_emprestimo,
-            'data_devolucao_prevista' => $request->data_devolucao_prevista,
-        ]);
 
-        // Redireciona para a página de detalhes do empréstimo
-        return redirect()->route('emprestimos.show', $emprestimo->id)
-                     ->with('success', 'Empréstimo atualizado com sucesso!');
+        $equipamento_id = $emprestimo->equipamento_id;
+
+        $equipamento = Equipamentos::find($equipamento_id);
+
+        // Verifica se o botão "Devolver" foi pressionado
+        if ($request->devolver == 'true') {
+            // Atualiza o status para "devolvido"
+            $equipamento->status = 'disponível';
+            $equipamento->update();
+
+            // Define a data de devolução como a data atual
+            $emprestimo->data_devolucao = now(); // A função 'now()' irá pegar a data e hora atuais.
+            // Salva a alteração
+            $emprestimo->save();
+
+            // Redireciona com uma mensagem de sucesso
+            return redirect()->route('emprestimos.index')->with('success', 'Equipamento devolvido com sucesso!');
+        }
+
+        // Se não for para devolver, apenas realiza a atualização normal
+        // Isso pode ser útil para outros tipos de atualização
+        $emprestimo->update($request->all());
+
+        return redirect()->route('emprestimos.index');
     }
+
+
+
 
     /**
      * Remove the specified resource from storage.
