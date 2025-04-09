@@ -34,16 +34,31 @@
                     <!-- Equipamento -->
                     <div class="mb-3">
                         <label for="equipamento_id" class="form-label">Equipamento</label>
-                        <select name="equipamento_id" id="equipamento_id" class="form-select" required>
+                        <select name="equipamento_id" id="equipamento_id" class="form-select" required onchange="showEquipamentoDetails()">
                             @foreach($equipamentos as $equipamento)
-                                <option value="{{ $equipamento->id }}">{{ $equipamento->nome }}</option>
+                                <option value="{{ $equipamento->id }}"
+                                        data-categoria="{{ optional($equipamento->categoria)->nome }}"
+                                        data-setor="{{ optional($equipamento->setor)->nome }}">
+                                    {{ $equipamento->nome }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
 
+                    <!-- Exibição da Categoria e Setor do Equipamento Selecionado -->
+                    <div class="mb-3">
+                        <label for="categoria" class="form-label">Categoria</label>
+                        <input type="text" id="categoria" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="setor" class="form-label">Setor</label>
+                        <input type="text" name="setor_nome" id="setor" class="form-control" required>
+                    </div>
+
                     <!-- Usuário -->
                     <div class="mb-3">
-                        <label for="usuario_id" class="form-label">Usuário</label>
+                        <label for="user_id" class="form-label">Usuário</label>
                         <select name="user_id" id="user_id" class="form-select" required>
                             @foreach($usuarios as $usuario)
                                 <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
@@ -76,7 +91,6 @@
                         <i class="fas fa-check-circle me-2"></i> Empréstimo cadastrado com sucesso!
                     </div>
                 @endif
-
             </div>
         </div>
     </div>
@@ -85,18 +99,16 @@
 
 @section('scripts')
     <script>
-        // Função para validar o formulário antes de enviar
-        document.getElementById('emprestimoForm').addEventListener('submit', function(event) {
-            // Impede o envio se algum campo obrigatório estiver vazio
-            const equipamento = document.getElementById('equipamento_id');
-            const usuario = document.getElementById('user_id');
-            const dataEmprestimo = document.getElementById('data_emprestimo');
-            const dataDevolucao = document.getElementById('data_devolucao_prevista');
+        // Função para exibir a categoria e o setor automaticamente ao selecionar o equipamento
+        function showEquipamentoDetails() {
+            var equipamento = document.getElementById('equipamento_id').selectedOptions[0];
+            document.getElementById('categoria').value = equipamento.getAttribute('data-categoria');
+            document.getElementById('setor').value = equipamento.getAttribute('data-setor');
+        }
 
-            if (!equipamento.value || !usuario.value || !dataEmprestimo.value || !dataDevolucao.value) {
-                event.preventDefault();
-                alert("Por favor, preencha todos os campos obrigatórios.");
-            }
-        });
+        // Chama a função para preencher os campos ao carregar a página
+        window.onload = function() {
+            showEquipamentoDetails();
+        };
     </script>
 @endsection

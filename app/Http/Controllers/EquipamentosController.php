@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Equipamentos;
+use App\Models\Categoria;  // Adicionado
+use App\Models\Setor;      // Adicionado
+use App\Models\User;       // Adicionado para acessar os usuários
 use Illuminate\Http\Request;
 
 class EquipamentosController extends Controller
@@ -12,7 +15,7 @@ class EquipamentosController extends Controller
      */
     public function index()
     {
-        $equipamentos = Equipamentos::all(); // Busca todos os equipamentos
+        $equipamentos = Equipamentos::all(); // Carrega todos os equipamentos
         return view('equipamentos.index', compact('equipamentos'));
     }
 
@@ -21,7 +24,10 @@ class EquipamentosController extends Controller
      */
     public function create()
     {
-        return view('equipamentos.create');
+        // Carregar todos os usuários
+        $usuarios = User::all();
+
+        return view('equipamentos.create', compact('usuarios')); // Passa os usuários para a view de criação
     }
 
     /**
@@ -34,13 +40,39 @@ class EquipamentosController extends Controller
             'nome' => 'required|string|max:255',
             'numero_serie' => 'required|string',
             'status' => 'required|string|in:disponível,emprestado,indisponível', // Verifique se o status é válido
+            'categoria_nome' => 'required|string',  // Valida o nome da categoria
+            'setor_nome' => 'required|string',      // Valida o nome do setor
+            // Validação sempre obrigatória para "data_emprestimo" e "data_devolucao_prevista"
+            'data_emprestimo' => 'required|date',  // Tornado obrigatório sempre
+            'usuario_responsavel' => 'required|exists:users,id',  // Verifica se o ID do usuário existe
+            'data_devolucao_prevista' => 'required|date', // Tornado obrigatório sempre
         ]);
 
-        // Criação do equipamento
-        Equipamentos::create($request->all());
+        // Criação ou obtenção do Setor
+        $setor = Setor::firstOrCreate([
+            'nome' => $request->setor_nome
+        ]);
 
-        // Redireciona para a lista de equipamentos
-        return redirect()->route('equipamentos.index');
+        // Criação ou obtenção da Categoria
+        $categoria = Categoria::firstOrCreate([
+            'nome' => $request->categoria_nome
+        ]);
+
+        // Criação do equipamento com as chaves estrangeiras de categoria e setor
+        $equipamento = Equipamentos::create([
+            'nome' => $request->nome,
+            'numero_serie' => $request->numero_serie,
+            'status' => $request->status,
+            'categoria_id' => $categoria->id,  // Relaciona a categoria
+            'setor_id' => $setor->id,          // Relaciona o setor
+            // Salva as informações de empréstimo
+            'data_emprestimo' => $request->data_emprestimo,
+            'usuario_responsavel' => $request->usuario_responsavel,
+            'data_devolucao_prevista' => $request->data_devolucao_prevista,
+        ]);
+
+        // Redireciona para a lista de equipamentos com uma mensagem de sucesso
+        return redirect()->route('equipamentos.index')->with('success', 'Equipamento cadastrado com sucesso!');
     }
 
     /**
@@ -48,7 +80,7 @@ class EquipamentosController extends Controller
      */
     public function show($id)
     {
-        $equipamento = Equipamentos::find($id);
+        $equipamento = Equipamentos::find($id); // Carrega o equipamento
         return view('equipamentos.show', compact('equipamento'));
     }
 
@@ -58,7 +90,10 @@ class EquipamentosController extends Controller
     public function edit($id)
     {
         $equipamento = Equipamentos::findOrFail($id); // Encontra o equipamento ou retorna erro 404
-        return view('equipamentos.edit', compact('equipamento')); // Passa o equipamento para a view
+        // Carregar todos os usuários
+        $usuarios = User::all();
+
+        return view('equipamentos.edit', compact('equipamento', 'usuarios')); // Passa o equipamento e os usuários para a view de edição
     }
 
     /**
@@ -66,19 +101,43 @@ class EquipamentosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Validação dos dados do equipamento
+        // Validação dos dados
         $request->validate([
             'nome' => 'required|string|max:255',
             'numero_serie' => 'required|string|max:100',
-            'status' => 'required|string|in:disponível,emprestado,indisponível', // Verifique os status válidos no seu sistema
+            'status' => 'required|string|in:disponível,emprestado,indisponível', // Verifique os status válidos
+            'categoria_nome' => 'required|string',  // Valida o nome da categoria
+            'setor_nome' => 'required|string',      // Valida o nome do setor
+            // Validação sempre obrigatória para "data_emprestimo" e "data_devolucao_prevista"
+            'data_emprestimo' => 'required|date',  // Tornado obrigatório sempre
+            'usuario_responsavel' => 'required|exists:users,id',  // Verifica se o ID do usuário existe
+            'data_devolucao_prevista' => 'required|date', // Tornado obrigatório sempre
         ]);
 
-        // Encontrar e atualizar o equipamento
+        // Atualiza o equipamento
         $equipamento = Equipamentos::findOrFail($id);
+
+        // Criação ou obtenção do Setor
+        $setor = Setor::firstOrCreate([
+            'nome' => $request->setor_nome
+        ]);
+
+        // Criação ou obtenção da Categoria
+        $categoria = Categoria::firstOrCreate([
+            'nome' => $request->categoria_nome
+        ]);
+
+        // Atualiza os dados do equipamento com as novas informações de categoria e setor
         $equipamento->update([
             'nome' => $request->nome,
             'numero_serie' => $request->numero_serie,
             'status' => $request->status,  // Atualiza o status conforme o valor enviado
+            'categoria_id' => $categoria->id,  // Atualiza a categoria
+            'setor_id' => $setor->id,          // Atualiza o setor
+            // Atualiza as informações de empréstimo
+            'data_emprestimo' => $request->data_emprestimo,
+            'usuario_responsavel' => $request->usuario_responsavel,
+            'data_devolucao_prevista' => $request->data_devolucao_prevista,
         ]);
 
         // Redireciona para a página de detalhes do equipamento com uma mensagem de sucesso

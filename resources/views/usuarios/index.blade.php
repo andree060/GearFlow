@@ -26,7 +26,7 @@
                     @foreach($usuarios as $usuario)
                         <tr>
                             <td class="align-middle">{{ $usuario->id }}</td>
-                            <td class="align-middle">{{ $usuario->nome }}</td>
+                            <td class="align-middle">{{ $usuario->name }}</td>
                             <td class="align-middle">{{ $usuario->email }}</td>
                             <td class="align-middle">
                                 <div class="d-flex flex-column gap-2">

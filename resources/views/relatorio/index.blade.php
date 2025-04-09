@@ -3,7 +3,6 @@
 @section('title', 'Relatórios - Sistema de Empréstimos')
 
 @section('content')
-
     <!-- Cabeçalho de Relatório -->
     <h1 class="text-center mb-4 font-weight-bold" style="font-size: 3rem; color: #343a40; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);">
         Relatórios de Equipamentos e Empréstimos
@@ -55,24 +54,25 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($emprestimos as $emprestimo)
-                    <tr>
-                        <td class="text-center">{{ \Carbon\Carbon::parse($emprestimo->data_emprestimo)->format('d/m/Y') }}</td>
-                        <td>{{ $emprestimo->user->name }}</td>
-                        <td>{{ $emprestimo->equipamento->nome }}</td>
-                        <td class="text-center">
-                            @if($emprestimo->equipamento->status == 'disponível')
-                                <span class="badge bg-success">Disponível</span>
-                            @elseif($emprestimo->equipamento->status == 'indisponível')
-                                <span class="badge bg-danger">Indisponível</span>
-                            @elseif($emprestimo->equipamento->status == 'emprestado')
-                                <span class="badge bg-warning">Emprestado</span>
-                            @else
-                                <span class="badge bg-danger">Indisponível</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
+            @foreach($emprestimos as $emprestimo)
+                <tr>
+                    <td class="text-center">{{ \Carbon\Carbon::parse($emprestimo->data_emprestimo)->format('d/m/Y') }}</td>
+                    <td>{{ $emprestimo->user->name }}</td>
+                    <td>{{ $emprestimo->equipamento ? $emprestimo->equipamento->nome : 'Equipamento não atribuído' }}</td>
+                    <td class="text-center">
+                        @if($emprestimo->equipamento && $emprestimo->equipamento->status == 'disponível')
+                            <span class="badge bg-success">Disponível</span>
+                        @elseif($emprestimo->equipamento && $emprestimo->equipamento->status == 'indisponível')
+                            <span class="badge bg-danger">Indisponível</span>
+                        @elseif($emprestimo->equipamento && $emprestimo->equipamento->status == 'emprestado')
+                            <span class="badge bg-warning">Emprestado</span>
+                        @else
+                            <span class="badge bg-danger">Indisponível</span>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+
             </tbody>
         </table>
         @else

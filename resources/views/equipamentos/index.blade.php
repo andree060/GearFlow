@@ -22,6 +22,7 @@
                         <th>Nome</th>
                         <th>Número de Série</th>
                         <th>Status</th>
+                        <th>Responsável</th> <!-- Coluna para exibir o nome do responsável -->
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -32,7 +33,10 @@
                             <td class="align-middle">{{ $equipamento->nome }}</td>
                             <td class="align-middle">{{ $equipamento->numero_serie }}</td>
                             <td class="align-middle">
-                                <span class="badge {{ strtolower($equipamento->status) == 'disponível' ? 'bg-success' : (strtolower($equipamento->status) == 'emprestado' ? 'bg-warning' : 'bg-danger') }} badge-custom">
+                                <span class="badge
+                                    {{ strtolower($equipamento->status) == 'disponível' ? 'bg-success' :
+                                    (strtolower($equipamento->status) == 'emprestado' ? 'bg-warning' : 'bg-danger') }}
+                                    badge-custom">
                                     @if(strtolower($equipamento->status) == 'disponível')
                                         <i class="fas fa-check-circle"></i> Disponível
                                     @elseif(strtolower($equipamento->status) == 'emprestado')
@@ -41,6 +45,13 @@
                                         <i class="fas fa-times-circle"></i> Indisponível
                                     @endif
                                 </span>
+                            </td>
+                            <td class="align-middle">
+                                @if(strtolower($equipamento->status) == 'emprestado' && $equipamento->usuario_responsavel)
+                                    {{ $equipamento->usuario_responsavel }} <!-- Exibe o responsável se o equipamento estiver emprestado -->
+                                @else
+                                    N/A <!-- Caso contrário, exibe "N/A" -->
+                                @endif
                             </td>
                             <td class="align-middle">
                                 <div class="d-flex flex-column gap-2">
@@ -75,10 +86,12 @@
 
 @section('scripts')
     <script>
+        // Confirmação para a exclusão
         function confirmDelete() {
             return confirm('Tem certeza que deseja excluir este equipamento?');
         }
 
+        // Confirmação para a edição
         function confirmEdit() {
             return confirm('Tem certeza que deseja editar este equipamento?');
         }

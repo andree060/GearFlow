@@ -25,7 +25,13 @@
                 <tbody>
                     @foreach($emprestimos as $emprestimo)
                         <tr class="table-row">
-                            <td class="align-middle">{{ $emprestimo->equipamento->nome }}</td>
+                            <td class="align-middle">
+                                @if($emprestimo->equipamento)
+                                    {{ $emprestimo->equipamento->nome }}
+                                @else
+                                    Equipamento não disponível
+                                @endif
+                            </td>
                             <td class="align-middle">{{ $emprestimo->user->name }}</td>
                             <td class="align-middle">{{ \Carbon\Carbon::parse($emprestimo->data_emprestimo)->format('d/m/Y') }}</td>
                             <td class="align-middle">
@@ -84,7 +90,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <a href="{{ route('home.index') }}"  class="btn btn-secondary w-auto shadow-sm rounded-pill" style="background-color: #6c757d; color: white;">
+            <a href="{{ route('home.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill" style="background-color: #6c757d; color: white;">
                 <i class="fas fa-arrow-left"></i> Voltar
             </a>
         </div>

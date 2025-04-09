@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('nome', 255);
             $table->string('numero_serie', 100);
             $table->string('status', 100);
+            $table->foreignId('categoria_id')->nullable()->constrained('categorias')->onDelete('set null');
+            $table->foreignId('setor_id')->nullable()->constrained('setores')->onDelete('set null');
+
             $table->timestamps();
         });
     }
