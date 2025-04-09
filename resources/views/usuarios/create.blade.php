@@ -1,18 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Usuário</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .alert-custom {
-            display: none;
-            font-size: 16px;
-        }
-    </style>
-</head>
-<body class="bg-light">
+@extends('layouts.app')
+
+@section('title', 'Cadastrar Usuário')
+
+@section('content')
 
     <!-- Container principal -->
     <div class="container mt-5">
@@ -64,7 +54,9 @@
         <div class="alert alert-success mt-3">{{ session('success') }}</div>
     @endif
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@endsection
+
+@section('scripts')
     <script>
         // Função para confirmar o cancelamento do formulário
         function confirmCancel() {
@@ -73,7 +65,7 @@
 
         // Validação de campos do formulário antes de enviar
         document.getElementById('userForm').addEventListener('submit', function(event) {
-            var password = document.getElementById('senha').value;
+            var password = document.getElementById('password').value;
             var passwordConfirmation = document.getElementById('password_confirmation').value;
             var name = document.getElementById('name').value;
             var email = document.getElementById('email').value;
@@ -91,5 +83,4 @@
             }
         });
     </script>
-</body>
-</html>
+@endsection

@@ -66,7 +66,9 @@
         </div>
 
         <div class="d-flex justify-content-end mt-3">
-            <a href="{{ route('home.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill">Voltar</a>
+            <a href="{{ route('home.index') }}"  class="btn btn-secondary w-auto shadow-sm rounded-pill" style="background-color: #6c757d; color: white;">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
         </div>
     </div>
 @endsection

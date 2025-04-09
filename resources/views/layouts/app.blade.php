@@ -144,8 +144,9 @@
 
         /* Estilo para a logomarca na barra de navegação */
         .navbar-brand img {
-            height: 50px; /* Ajuste o tamanho conforme necessário */
+            height: 70px; /* Aumentando o tamanho da logo */
             width: auto;
+            margin-right: 15px; /* Espaçamento à direita da logo */
         }
 
         /* Ajuste de layout para garantir que o conteúdo não fique atrás do rodapé */
@@ -168,13 +169,54 @@
             border-radius: 5px;
         }
 
+        /* Layout da barra de navegação - Logo e Título */
+        .navbar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Isso garante que a logo fique à esquerda */
+        }
+
+        /* Centralizando o título no cabeçalho */
+        .titulo-centralizado {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 37px;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Alteração da cor do cabeçalho da tabela para azul */
+        table thead {
+            background-color: #007bff; /* Azul */
+            color: white; /* Texto branco */
+        }
+
+        /* Estilo das células de cabeçalho */
+        table th {
+            font-weight: bold; /* Deixa os títulos das colunas em negrito */
+            text-align: center; /* Alinha o texto ao centro */
+        }
+
+        /* Estilo das células da tabela */
+        table td {
+            text-align: center; /* Alinha o texto ao centro */
+        }
+
     </style>
 </head>
 <body class="bg-light">
 
-    <!-- Cabeçalho fixo com cor azul -->
-    <div class="bg-primary text-white text-center py-4">
-        <h1 class="mb-0">Sistema de Empréstimos de Equipamentos</h1>
+    <!-- Cabeçalho com o título centralizado -->
+    <div class="bg-primary text-white py-3">
+        <div class="container navbar-header">
+            <!-- Logo -->
+            <img src="{{ asset('storage/imagem/logo2.png') }}" alt="Logo" class="img-fluid" style="height: 84px;">
+            <!-- Título centralizado -->
+            <div class="titulo-centralizado">
+                Sistema de Empréstimos de Equipamentos
+            </div>
+        </div>
     </div>
 
     <!-- Barra de navegação -->
@@ -185,7 +227,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <!-- Botão Inicial Simples -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('home.index') }}">
                             Inicial
@@ -240,14 +281,11 @@
     </div>
 
     <div class="container py-5 content-wrapper">
-        <!-- Seção de conteúdo será injetada aqui -->
         @yield('content')
     </div>
 
-    <!-- Script do Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Aqui você pode adicionar o script para os gráficos -->
     @yield('scripts')
 </body>
 </html>

@@ -1,21 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Usuário</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+@extends('layouts.app')
 
-    
+@section('title', 'Detalhes do Usuário')
+
+@section('content')
+
     <!-- Título da página com cor personalizada -->
-    <div class="bg-primary text-white text-center py-4">
-        <h1 class="mb-0">Detalhes do Usuário</h1>
-    </div>
+    <h1 class="text-center mb-4 font-weight-bold" style="font-size: 3rem; color: #343a40; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);">
+        Detalhes do Usuário
+    </h1>
 
     <div class="container mt-5">
-        
+
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -27,23 +22,30 @@
             <div class="card-body">
                 <!-- Tabela de detalhes -->
                 <table class="table table-striped">
-                <tr>
-                    <th>Nome</th>
-                    <td>{{ $usuario->nome }}</td>
-                </tr>
-                <tr>
-                    <th>Email</th>
-                    <td>{{ $usuario->email }}</td>
-                </tr>
-            </table>
+                    <tr>
+                        <th>Nome</th>
+                        <td>{{ $usuario->name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ $usuario->email }}</td>
+                    </tr>
+                </table>
 
-            <div class="d-flex justify-content-start gap-2">
-                <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-warning w-auto">Editar</a>
-                <a href="{{ route('usuarios.index') }}" class="btn btn-secondary w-auto">Voltar</a>
+                <div class="d-flex justify-content-start gap-2">
+                    <!-- Botão Editar -->
+                    <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-warning w-auto shadow-sm rounded-pill text-white">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+
+                    <!-- Botão Voltar com cor fixa -->
+                    <a href="{{ route('usuarios.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill" style="background-color: #6c757d; color: white;">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                </div>
             </div>
         </div>
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

@@ -66,7 +66,7 @@
 
                                     <!-- Botão Devolver Equipamento -->
                                     @if(!$emprestimo->data_devolucao)
-                                        <form action="{{ route('emprestimos.update', $emprestimo->id) }}" method="POST">
+                                        <form action="{{ route('emprestimos.update', $emprestimo->id) }}" method="POST" class="devolver-form">
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="devolver" value="true">
@@ -84,7 +84,9 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <a href="{{ route('home.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill">Voltar</a>
+            <a href="{{ route('home.index') }}"  class="btn btn-secondary w-auto shadow-sm rounded-pill" style="background-color: #6c757d; color: white;">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
         </div>
     </div>
 @endsection
@@ -109,6 +111,17 @@
                 if (confirm('Tem certeza que deseja excluir este empréstimo?')) {
                     this.submit();
                     showSuccessAlert();
+                }
+            });
+        });
+
+        // Confirma a devolução antes de enviar o formulário
+        document.querySelectorAll('.devolver-form').forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Impede o envio imediato
+
+                if (confirm('Tem certeza que deseja devolver este equipamento?')) {
+                    this.submit();
                 }
             });
         });

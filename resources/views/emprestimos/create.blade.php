@@ -1,18 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Empréstimo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .alert-custom {
-            display: none;
-            font-size: 16px;
-        }
-    </style>
-</head>
-<body class="bg-light">
+@extends('layouts.app')
+
+@section('title', 'Cadastrar Empréstimo')
+
+@section('content')
 
     <div class="container mt-5">
         <div class="card shadow-sm">
@@ -91,13 +81,15 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@endsection
+
+@section('scripts')
     <script>
         // Função para validar o formulário antes de enviar
         document.getElementById('emprestimoForm').addEventListener('submit', function(event) {
             // Impede o envio se algum campo obrigatório estiver vazio
             const equipamento = document.getElementById('equipamento_id');
-            const usuario = document.getElementById('usuario_id');
+            const usuario = document.getElementById('user_id');
             const dataEmprestimo = document.getElementById('data_emprestimo');
             const dataDevolucao = document.getElementById('data_devolucao_prevista');
 
@@ -107,6 +99,4 @@
             }
         });
     </script>
-
-</body>
-</html>
+@endsection

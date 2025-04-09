@@ -36,7 +36,7 @@
                         <td>{{ \Carbon\Carbon::parse($emprestimo->data_devolucao_prevista)->format('d/m/Y') }}</td>
                     </tr>
                 </table>
-                
+
                 <div class="d-flex justify-content-start gap-2">
                     <!-- Botões Editar e Voltar -->
                     <a href="{{ route('emprestimos.edit', $emprestimo->id) }}" class="btn btn-warning w-auto shadow-sm rounded-pill text-white">
