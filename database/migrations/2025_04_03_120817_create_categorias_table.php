@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categorias', function (Blueprint $table) {
-            $table->id();
-            $table->string('nome', 255); // Nome da categoria
-            $table->timestamps();
+            $table->id();  // Cria a chave primária 'id'
+            $table->string('nome');  // Cria a coluna 'nome' para armazenar o nome da categoria
+            $table->timestamps();  // Cria as colunas 'created_at' e 'updated_at'
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categorias');
+        Schema::dropIfExists('categorias');  // Remove a tabela se precisar reverter a migração
     }
 };

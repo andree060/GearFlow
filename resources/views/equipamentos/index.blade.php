@@ -18,7 +18,6 @@
             <table class="table table-bordered table-striped table-hover shadow-sm rounded-3">
                 <thead class="table-dark">
                     <tr>
-                        <th>ID</th>
                         <th>Nome</th>
                         <th>Número de Série</th>
                         <th>Status</th>
@@ -29,7 +28,6 @@
                 <tbody>
                     @foreach($equipamentos as $equipamento)
                         <tr>
-                            <td class="align-middle">{{ $equipamento->id }}</td>
                             <td class="align-middle">{{ $equipamento->nome }}</td>
                             <td class="align-middle">{{ $equipamento->numero_serie }}</td>
                             <td class="align-middle">
@@ -48,11 +46,12 @@
                             </td>
                             <td class="align-middle">
                                 @if(strtolower($equipamento->status) == 'emprestado' && $equipamento->usuario_responsavel)
-                                    {{ $equipamento->usuario_responsavel }} <!-- Exibe o responsável se o equipamento estiver emprestado -->
+                                    {{ $equipamento->usuarioResponsavel->name }} <!-- Exibe o nome do responsável -->
                                 @else
-                                    N/A <!-- Caso contrário, exibe "N/A" -->
+                                    N/A <!-- Exibe "N/A" se o equipamento não estiver emprestado -->
                                 @endif
                             </td>
+                            
                             <td class="align-middle">
                                 <div class="d-flex flex-column gap-2">
                                     <a href="{{ route('equipamentos.show', $equipamento->id) }}" class="btn btn-info w-100 shadow-sm rounded-pill text-white">

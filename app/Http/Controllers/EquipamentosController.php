@@ -15,7 +15,10 @@ class EquipamentosController extends Controller
      */
     public function index()
     {
-        $equipamentos = Equipamentos::all(); // Carrega todos os equipamentos
+        // Carrega todos os equipamentos
+        $equipamentos = Equipamentos::all();
+
+        // Passa os equipamentos para a view
         return view('equipamentos.index', compact('equipamentos'));
     }
 
@@ -36,17 +39,21 @@ class EquipamentosController extends Controller
     public function store(Request $request)
     {
         // Validação dos dados
-        $request->validate([
+        $rules = [
             'nome' => 'required|string|max:255',
             'numero_serie' => 'required|string',
-            'status' => 'required|string|in:disponível,emprestado,indisponível', // Verifique se o status é válido
-            'categoria_nome' => 'required|string',  // Valida o nome da categoria
-            'setor_nome' => 'required|string',      // Valida o nome do setor
-            // Validação sempre obrigatória para "data_emprestimo" e "data_devolucao_prevista"
-            'data_emprestimo' => 'required|date',  // Tornado obrigatório sempre
-            'usuario_responsavel' => 'required|exists:users,id',  // Verifica se o ID do usuário existe
-            'data_devolucao_prevista' => 'required|date', // Tornado obrigatório sempre
-        ]);
+            'status' => 'required|string|in:disponível,emprestado,indisponível',
+            'categoria_nome' => 'required|string',
+            'setor_nome' => 'required|string',
+        ];
+
+        // Se o status for "emprestado", valida o usuário responsável
+        if ($request->status === 'emprestado') {
+            $rules['usuario_responsavel'] = 'required|exists:users,id';
+        }
+
+        // Aplica a validação
+        $request->validate($rules);
 
         // Criação ou obtenção do Setor
         $setor = Setor::firstOrCreate([
@@ -58,31 +65,26 @@ class EquipamentosController extends Controller
             'nome' => $request->categoria_nome
         ]);
 
-        // Criação do equipamento com as chaves estrangeiras de categoria e setor
-        $equipamento = Equipamentos::create([
+        // Criação do Equipamento
+        Equipamentos::create([
             'nome' => $request->nome,
             'numero_serie' => $request->numero_serie,
             'status' => $request->status,
-            'categoria_id' => $categoria->id,  // Relaciona a categoria
-            'setor_id' => $setor->id,          // Relaciona o setor
-            // Salva as informações de empréstimo
-            'data_emprestimo' => $request->data_emprestimo,
-            'usuario_responsavel' => $request->usuario_responsavel,
-            'data_devolucao_prevista' => $request->data_devolucao_prevista,
+            'categoria_id' => $categoria->id,
+            'setor_id' => $setor->id,
+            'usuario_responsavel' => $request->usuario_responsavel ?? null, // Salva o ID do responsável ou null
         ]);
 
-        // Redireciona para a lista de equipamentos com uma mensagem de sucesso
         return redirect()->route('equipamentos.index')->with('success', 'Equipamento cadastrado com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show($id)
     {
         $equipamento = Equipamentos::find($id); // Carrega o equipamento
         return view('equipamentos.show', compact('equipamento'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -108,10 +110,7 @@ class EquipamentosController extends Controller
             'status' => 'required|string|in:disponível,emprestado,indisponível', // Verifique os status válidos
             'categoria_nome' => 'required|string',  // Valida o nome da categoria
             'setor_nome' => 'required|string',      // Valida o nome do setor
-            // Validação sempre obrigatória para "data_emprestimo" e "data_devolucao_prevista"
-            'data_emprestimo' => 'required|date',  // Tornado obrigatório sempre
-            'usuario_responsavel' => 'required|exists:users,id',  // Verifica se o ID do usuário existe
-            'data_devolucao_prevista' => 'required|date', // Tornado obrigatório sempre
+            'usuario_responsavel' => 'required_if:status,emprestado|string', // Agora é o nome, não o ID
         ]);
 
         // Atualiza o equipamento
@@ -134,15 +133,13 @@ class EquipamentosController extends Controller
             'status' => $request->status,  // Atualiza o status conforme o valor enviado
             'categoria_id' => $categoria->id,  // Atualiza a categoria
             'setor_id' => $setor->id,          // Atualiza o setor
-            // Atualiza as informações de empréstimo
-            'data_emprestimo' => $request->data_emprestimo,
-            'usuario_responsavel' => $request->usuario_responsavel,
-            'data_devolucao_prevista' => $request->data_devolucao_prevista,
+            // Atualiza as informações de empréstimo, apenas se o status for 'emprestado'
+            'usuario_responsavel' => $request->usuario_responsavel ?? null,
         ]);
 
         // Redireciona para a página de detalhes do equipamento com uma mensagem de sucesso
         return redirect()->route('equipamentos.show', $equipamento->id)
-                         ->with('success', 'Equipamento atualizado com sucesso!');
+                        ->with('success', 'Equipamento atualizado com sucesso!');
     }
 
     /**
