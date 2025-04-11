@@ -16,7 +16,7 @@ class EquipamentosController extends Controller
     public function index()
     {
         // Carrega todos os equipamentos
-        $equipamentos = Equipamentos::all();
+        $equipamentos = Equipamentos::all(); 
 
         // Passa os equipamentos para a view
         return view('equipamentos.index', compact('equipamentos'));
@@ -27,11 +27,18 @@ class EquipamentosController extends Controller
      */
     public function create()
     {
-        // Carregar todos os usuários
+        // Carrega equipamentos com suas categorias, setores e manutenções
+        $equipamentos = Equipamentos::with(['categoria', 'setor', 'manutencoes'])->get();
+
+        // Carrega todos os usuários
         $usuarios = User::all();
 
-        return view('equipamentos.create', compact('usuarios')); // Passa os usuários para a view de criação
+        // Retorna a view com os dados necessários
+        return view('equipamentos.create', compact('equipamentos', 'usuarios'));
     }
+
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -79,11 +86,7 @@ class EquipamentosController extends Controller
     }
 
 
-    public function show($id)
-    {
-        $equipamento = Equipamentos::find($id); // Carrega o equipamento
-        return view('equipamentos.show', compact('equipamento'));
-    }
+
 
 
     /**

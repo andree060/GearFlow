@@ -40,7 +40,6 @@
             <strong>Data de Fim:</strong> {{ $dataFim->format('d/m/Y') }}
         </div>
     @endif
-
     <!-- Tabela de Empréstimos -->
     @if ($dataInicio || $dataFim)
         @if ($emprestimos->count() > 0)
@@ -88,6 +87,9 @@
             ['title' => 'Equipamentos Disponíveis', 'value' => $totalEquipamentosDisponiveis],
             ['title' => 'Equipamentos Emprestados', 'value' => $totalEquipamentosEmEmprestimo],
             ['title' => 'Equipamentos Indisponíveis', 'value' => $totalEquipamentosIndisponiveis],
+            ['title' => 'Equipamentos Devolvidos', 'value' => $totalEquipamentosDevolvidos],
+            ['title' => 'Equipamentos em Manutenção', 'value' => $totalEquipamentosEmManutencao],
+            ['title' => 'Equipamentos Funcionando', 'value' => $totalEquipamentosFuncionando],
             ['title' => 'Empréstimos Ativos', 'value' => $totalEmprestimosAtivos],
             ['title' => 'Usuários Cadastrados', 'value' => $totalUsuarios],
         ] as $card)
@@ -104,40 +106,31 @@
 
     <!-- Seção de Gráficos -->
     <div class="row d-flex justify-content-between g-4 animated fadeInUp" style="animation-delay: 3s;">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card shadow-lg rounded-3">
                 <div class="card-body">
                     <h5 class="text-center">Empréstimos Ativos</h5>
-                    <canvas id="emprestimosChart" class="chart" style="height: 200px;"></canvas>
+                    <canvas id="emprestimosChart" class="chart" style="height: 350px;"></canvas>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card shadow-lg rounded-3">
                 <div class="card-body">
                     <h5 class="text-center">Equipamentos</h5>
-                    <canvas id="equipamentosChart" class="chart" style="height: 200px;"></canvas>
+                    <canvas id="equipamentosChart" class="chart" style="height: 350px;"></canvas>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card shadow-lg rounded-3">
                 <div class="card-body">
                     <h5 class="text-center">Usuários</h5>
-                    <canvas id="usuariosChart" class="chart" style="height: 200px;"></canvas>
+                    <canvas id="usuariosChart" class="chart" style="height: 350px;"></canvas>
                 </div>
             </div>
         </div>
-        <!-- <div class="col-md-3">
-            <div class="card shadow-lg rounded-3">
-                <div class="card-body">
-                    <h5 class="text-center">Equipamentos em Manutenção e Funcionando</h5>
-                    <canvas id="equipamentosStatusChart" class="chart" style="height: 200px;"></canvas>
-                </div>
-            </div>
-        </div> -->
     </div>
-
 @endsection
 
 @section('scripts')
@@ -160,6 +153,9 @@
                     backgroundColor: '#000',
                     titleColor: '#fff',
                     bodyColor: '#fff',
+                    bodyFont: {
+                        size: 14
+                    }
                 }
             }
         };
@@ -173,8 +169,8 @@
                 datasets: [{
                     data: [{{ $totalEmprestimosAtivos }}, {{ $totalEmprestimosDevolvidos }}],
                     backgroundColor: ['#4caf50', '#2196f3'],
-                    borderWidth: 2,
-                    hoverOffset: 10
+                    borderWidth: 4,
+                    hoverOffset: 20
                 }]
             },
             options: chartOptions
@@ -185,11 +181,11 @@
         new Chart(ctx2, {
             type: 'pie',
             data: {
-                labels: ['Disponíveis', 'Emprestados', 'Indisponíveis', 'Devolvidos'],
+                labels: ['Disponíveis', 'Emprestados', 'Indisponíveis', 'Devolvidos', 'Em Manutenção', 'Funcionando'],
                 datasets: [{
-                    data: [{{ $totalEquipamentosDisponiveis }}, {{ $totalEquipamentosEmEmprestimo }}, {{ $totalEquipamentosIndisponiveis }}, {{ $totalEquipamentosDevolvidos }}],
-                    backgroundColor: ['#4caf50', '#ff9800', '#f44336', '#2196f3'],
-                    borderWidth: 2
+                    data: [{{ $totalEquipamentosDisponiveis }}, {{ $totalEquipamentosEmEmprestimo }}, {{ $totalEquipamentosIndisponiveis }}, {{ $totalEquipamentosDevolvidos }}, {{ $totalEquipamentosEmManutencao }}, {{ $totalEquipamentosFuncionando }}],
+                    backgroundColor: ['#4caf50', '#ff9800', '#f44336', '#2196f3', '#9e9e9e', '#00bcd4'],
+                    borderWidth: 4
                 }]
             },
             options: chartOptions
@@ -206,29 +202,12 @@
                     data: [{{ $totalUsuarios }}],
                     backgroundColor: '#2196f3',
                     borderColor: '#1976d2',
-                    borderWidth: 2,
-                    borderRadius: 5,
+                    borderWidth: 4,
+                    borderRadius: 10,
                 }]
             },
             options: chartOptions
         });
-
-        // // Gráfico de Equipamentos em Manutenção e Funcionando
-        // var ctx4 = document.getElementById('equipamentosStatusChart').getContext('2d');
-        // new Chart(ctx4, {
-        //     type: 'bar',
-        //     data: {
-        //         labels: ['Manutenção', 'Funcionando'],
-        //         datasets: [{
-        //             label: 'Equipamentos',
-        //             data: [{{ $totalEquipamentosEmManutencao }}, {{ $totalEquipamentosFuncionando }}],
-        //             backgroundColor: ['#f44336', '#4caf50'],
-        //             borderColor: '#1976d2',
-        //             borderWidth: 2,
-        //             borderRadius: 5,
-        //         }]
-        //     },
-        //     options: chartOptions
-        // });
     </script>
 @endsection
+

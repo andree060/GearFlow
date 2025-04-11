@@ -76,3 +76,4 @@ class RelatorioController extends Controller
         ));
     }
 }
+

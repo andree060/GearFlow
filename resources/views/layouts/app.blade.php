@@ -20,12 +20,17 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body {
+            padding-bottom: 60px;
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f4f7fa;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
 
         /* Sidebar */
@@ -35,40 +40,50 @@
             position: fixed;
             top: 0;
             left: -250px;
-            background-color: #007bff;
+            background-color: #003366;
             padding-top: 60px;
-            transition: 0.3s ease-in-out; /* Transição suave */
+            transition: 0.3s ease-in-out;
             z-index: 200;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar a {
-            padding: 15px 25px;
+            padding: 16px 24px;
             text-decoration: none;
             font-size: 16px;
             color: white;
             display: block;
             transition: 0.3s ease;
-            font-weight: bold;
-            margin-bottom: 5px; /* Distância entre os links */
+            font-weight: 500;
+            margin-bottom: 5px;
+            border-radius: 5px;
         }
 
-        /* Efeito de Hover com animação */
         .sidebar a:hover {
-            background-color: #0056b3;
-            transform: scale(1.05); /* Efeito de aumento ao passar o mouse */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Sombra no hover */
+            background-color: #005f99;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar.active {
-            left: 0; /* Aparece quando a sidebar está ativa */
+            left: 0;
+        }
+
+        .submenu {
+            display: none;
+            padding-left: 20px;
+        }
+
+        .submenu.active {
+            display: block;
         }
 
         /* Hamburger */
         #menu-btn {
             position: fixed;
-            top: 15px;
+            top: 20px;
             left: 20px;
-            font-size: 26px;
+            font-size: 28px;
             color: white;
             background: none;
             border: none;
@@ -78,33 +93,37 @@
         }
 
         #menu-btn:hover {
-            color: #0056b3;
-            transform: scale(1.1); /* Efeito de aumento no hover */
+            color: #00aaff;
+            transform: scale(1.1);
+        }
+
+        #menu-btn.active i {
+            color: black;
         }
 
         /* Top header */
         .top-header {
-            background-color: #007bff;
+            background-color: #003366;
             color: white;
-            padding: 15px 0;
+            padding: 20px 0;
             text-align: center;
             position: relative;
             z-index: 100;
             display: flex;
             justify-content: center;
             align-items: center;
+            border-bottom: 2px solid #00aaff;
         }
 
         .top-header img {
-            height: 84px;
-            margin-right: 15px; /* Espaço entre logo e nome */
+            height: 70px;
+            margin-right: 20px;
         }
 
         .titulo-centralizado {
-            font-size: 30px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: 600;
             color: white;
-            margin-top: 10px;
         }
 
         /* Conteúdo */
@@ -112,28 +131,30 @@
             padding: 30px 20px;
             margin-left: 0;
             transition: margin-left 0.3s ease-in-out;
-            margin-top: 80px; /* Ajusta para a barra de navegação */
-            text-align: center; /* Centraliza o conteúdo da página */
+            margin-top: 90px;
+            text-align: center;
+            min-height: 100vh;
+            overflow-y: auto;
         }
 
-        /* Conteúdo se ajusta ao abrir o menu */
         .sidebar.active ~ .content-wrapper {
-            margin-left: 250px; /* Quando o menu abre, o conteúdo se ajusta */
+            margin-left: 250px;
         }
 
         /* Rodapé fixo */
         footer {
-            background-color: #007bff;
+            background-color: #003366;
             color: white;
             padding: 15px 0;
             text-align: center;
-            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             z-index: 100;
             font-size: 14px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
         }
+
 
         /* Tabelas */
         table {
@@ -143,8 +164,9 @@
             margin-left: auto;
             margin-right: auto;
             text-align: center;
-            border-radius: 10px; /* Bordas arredondadas */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra na tabela */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
         }
 
         table td {
@@ -152,27 +174,32 @@
         }
 
         table thead {
-            background-color: #007bff;
+            background-color: #003366;
             color: white;
         }
 
         table tbody tr:hover {
-            background-color: #f1f1f1; /* Efeito de hover nas linhas da tabela */
+            background-color: #f1f1f1;
             cursor: pointer;
         }
 
         .dataTables_wrapper .dataTables_paginate .paginate_button {
-            color: #007bff;
-            border: 1px solid #007bff;
+            color: #003366;
+            border: 1px solid #003366;
             background: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 0 3px;
+            font-weight: 600;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            background-color: #007bff;
+            background-color: #003366;
             color: white;
         }
 
-        /* Animações de carregamento */
+        /* Loading Spinner */
         .loading {
             display: flex;
             justify-content: center;
@@ -180,14 +207,87 @@
             height: 100vh;
             font-size: 24px;
             font-weight: bold;
-            color: #007bff;
+            color: #003366;
         }
 
-        /* Centralização de conteúdo nas páginas específicas */
         .page-content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+        }
+
+        /* Gráficos */
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .chart-container canvas {
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* Media Queries */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 230px;
+            }
+
+            .top-header {
+                flex-direction: column;
+                padding: 10px 0;
+            }
+
+            .titulo-centralizado {
+                font-size: 28px;
+            }
+
+            .content-wrapper {
+                margin-top: 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 250px;
+                left: -250px;
+                position: absolute;
+                transition: left 0.3s ease-in-out;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            #menu-btn {
+                display: block;
+            }
+
+            .content-wrapper {
+                margin-left: 0;
+                margin-top: 60px;
+            }
+
+            table {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar a {
+                font-size: 14px;
+            }
+
+            .titulo-centralizado {
+                font-size: 20px;
+            }
+        }
+
+        /* Estilos para o botão do menu */
+        #menu-btn i {
+            transition: color 0.3s ease;
+            color: white; /* Cor inicial do ícone */
         }
     </style>
 </head>
@@ -201,16 +301,34 @@
 
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
-        <a href="{{ route('home.index') }}"><i class="fas fa-home me-2"></i>Inicial</a>
-        <a href="{{ route('equipamentos.create') }}"><i class="fas fa-cogs me-2"></i>Cadastrar Equipamento</a>
-        <a href="{{ route('usuarios.create') }}"><i class="fas fa-users me-2"></i>Cadastrar Usuário</a>
-        <a href="{{ route('emprestimos.create') }}"><i class="fas fa-tools me-2"></i>Cadastrar Empréstimo</a>
-        <a href="{{ route('manutencao.create') }}"><i class="fas fa-wrench me-2"></i>Cadastrar Manutenção</a>
-        <a href="{{ route('equipamentos.index') }}"><i class="fas fa-cogs me-2"></i>Listar Equipamentos</a>
-        <a href="{{ route('usuarios.index') }}"><i class="fas fa-users me-2"></i>Listar Usuários</a>
-        <a href="{{ route('emprestimos.index') }}"><i class="fas fa-tools me-2"></i>Listar Empréstimos</a>
-        <a href="{{ route('manutencao.index') }}"><i class="fas fa-wrench me-2"></i>Listar Manutenções</a>
+        <a href="{{ route('home.index') }}"><i class="fas fa-home me-2"></i>Início</a>
+
+        <a href="#" class="toggle-submenu" id="equipamentosMenu"><i class="fas fa-cogs me-2"></i> Equipamentos <i class="fas fa-chevron-down ms-2"></i></a>
+        <div class="submenu" id="equipamentosSubmenu">
+            <a href="{{ route('equipamentos.create') }}"><i class="fas fa-plus me-2"></i>Cadastrar Equipamento</a>
+            <a href="{{ route('equipamentos.index') }}"><i class="fas fa-list me-2"></i>Listar Equipamentos</a>
+        </div>
+
+        <a href="#" class="toggle-submenu" id="usuariosMenu"><i class="fas fa-users me-2"></i> Usuários <i class="fas fa-chevron-down ms-2"></i></a>
+        <div class="submenu" id="usuariosSubmenu">
+            <a href="{{ route('usuarios.create') }}"><i class="fas fa-plus me-2"></i>Cadastrar Usuário</a>
+            <a href="{{ route('usuarios.index') }}"><i class="fas fa-list me-2"></i>Listar Usuários</a>
+        </div>
+
+        <a href="#" class="toggle-submenu" id="emprestimosMenu"><i class="fas fa-tools me-2"></i> Empréstimos <i class="fas fa-chevron-down ms-2"></i></a>
+        <div class="submenu" id="emprestimosSubmenu">
+            <a href="{{ route('emprestimos.create') }}"><i class="fas fa-plus me-2"></i>Cadastrar Empréstimo</a>
+            <a href="{{ route('emprestimos.index') }}"><i class="fas fa-list me-2"></i>Listar Empréstimos</a>
+        </div>
+
+        <a href="#" class="toggle-submenu" id="manutencaoMenu"><i class="fas fa-wrench me-2"></i> Manutenção <i class="fas fa-chevron-down ms-2"></i></a>
+        <div class="submenu" id="manutencaoSubmenu">
+            <a href="{{ route('manutencao.create') }}"><i class="fas fa-plus me-2"></i>Cadastrar Manutenção</a>
+            <a href="{{ route('manutencao.index') }}"><i class="fas fa-list me-2"></i>Listar Manutenções</a>
+        </div>
+
         <a href="{{ route('relatorio.index') }}"><i class="fas fa-chart-line me-2"></i>Ver Relatório</a>
+
         <form action="{{ route('logout') }}" method="POST" class="px-3 mt-3">
             @csrf
             <button type="submit" class="btn btn-danger w-100">Sair</button>
@@ -225,25 +343,72 @@
         </div>
     </div>
 
-    <!-- Conteúdo principal -->
-    <div class="container page-content">
-        @yield('content')
+    <!-- Conteúdo -->
+    <div class="content-wrapper">
+        <div class="container page-content">
+            @yield('content')
+
+            <div class="chart-container">
+                <canvas id="emprestimosChart"></canvas>
+                <canvas id="equipamentosChart"></canvas>
+                <canvas id="usuariosChart"></canvas>
+            </div>
+        </div>
     </div>
 
-    <!-- Bootstrap Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Footer -->
+    <footer>
+        &copy; {{ date('Y') }} Sistema de Empréstimos
+    </footer>
 
-    <!-- Sidebar Script -->
+
+    <!-- Scripts -->
     <script>
-        // Toggle da sidebar com animação
-        document.getElementById('menu-btn').addEventListener('click', function () {
-            var sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
+        const menuBtn = document.getElementById('menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const toggleSubmenus = document.querySelectorAll('.toggle-submenu');
+        const icon = menuBtn.querySelector('i');
 
-            // Animar conteúdo
-            var contentWrapper = document.querySelector('.content-wrapper');
-            contentWrapper.style.transition = 'margin-left 0.3s ease-in-out';
-            contentWrapper.classList.toggle('shifted');
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            menuBtn.classList.toggle('active');
+        });
+
+        toggleSubmenus.forEach(menu => {
+            menu.addEventListener('click', function () {
+                const submenu = this.nextElementSibling;
+                submenu.classList.toggle('active');
+            });
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                sidebar.classList.remove('active');
+                menuBtn.classList.remove('active');
+            }
+        });
+
+        // Scroll color change
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 0) {
+                icon.style.color = 'black';  // Quando rolar, muda pra preto
+            } else {
+                icon.style.color = 'white';  // No topo, branco de novo
+            }
+        });
+
+        $(document).ready(function () {
+            $('table').DataTable({
+                pageLength: 10,
+                language: {
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ itens por página",
+                    zeroRecords: "Nenhum item encontrado",
+                    info: "Página _PAGE_ de _PAGES_",
+                    infoEmpty: "Nenhum item disponível",
+                    infoFiltered: "(filtrado de _MAX_ itens totais)"
+                }
+            });
         });
     </script>
 

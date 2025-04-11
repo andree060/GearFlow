@@ -12,28 +12,49 @@ class Equipamentos extends Model
     protected $table = 'equipamentos';
     protected $fillable = ['nome', 'numero_serie', 'status', 'categoria_id', 'setor_id', 'usuario_responsavel'];
 
-    // Relacionamento com os Empréstimos
     public function emprestimos()
     {
         return $this->hasMany(Emprestimos::class, 'equipamento_id');
     }
 
-    // Relacionamento com Categoria
     public function categoria()
     {
         return $this->belongsTo(Categoria::class, 'categoria_id');
     }
 
-    // Relacionamento com Setor
     public function setor()
     {
         return $this->belongsTo(Setor::class, 'setor_id');
     }
 
-    // Relacionamento com o Usuário (Responsável)
     public function usuarioResponsavel()
     {
         return $this->belongsTo(User::class, 'usuario_responsavel');
     }
-    
+
+    public function manutencoes()
+    {
+        return $this->hasMany(Manutencao::class, 'equipamento_id');
+    }
+
+    public function statusAtual()
+    {
+        $ultimaManutencao = $this->manutencoes()->latest('data_manutencao')->first();
+
+        if ($ultimaManutencao && $ultimaManutencao->status !== 'Funcionando') {
+            return 'Em Manutenção';
+        }
+
+        return 'Funcionando';
+    }
+
+    public function isEmManutencao()
+    {
+        return $this->statusAtual() === 'Em Manutenção';
+    }
+
+    public function isFuncionando()
+    {
+        return $this->statusAtual() === 'Funcionando';
+    }
 }
