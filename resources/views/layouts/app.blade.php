@@ -147,6 +147,7 @@
             color: white;
             padding: 15px 0;
             text-align: center;
+
             bottom: 0;
             left: 0;
             width: 100%;

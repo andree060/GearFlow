@@ -21,7 +21,6 @@
                         <th>Nome</th>
                         <th>Número de Série</th>
                         <th>Status</th>
-                        <th>Responsável</th> <!-- Coluna para exibir o nome do responsável -->
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -32,26 +31,15 @@
                             <td class="align-middle">{{ $equipamento->numero_serie }}</td>
                             <td class="align-middle">
                                 <span class="badge
-                                    {{ strtolower($equipamento->status) == 'disponível' ? 'bg-success' :
-                                    (strtolower($equipamento->status) == 'emprestado' ? 'bg-warning' : 'bg-danger') }}
+                                    {{ strtolower($equipamento->status) == 'disponível' ? 'bg-success' : 'bg-danger' }}
                                     badge-custom">
                                     @if(strtolower($equipamento->status) == 'disponível')
                                         <i class="fas fa-check-circle"></i> Disponível
-                                    @elseif(strtolower($equipamento->status) == 'emprestado')
-                                        <i class="fas fa-hand-holding"></i> Emprestado
                                     @else
                                         <i class="fas fa-times-circle"></i> Indisponível
                                     @endif
                                 </span>
                             </td>
-                            <td class="align-middle">
-                                @if(strtolower($equipamento->status) == 'emprestado' && $equipamento->usuario_responsavel)
-                                    {{ $equipamento->usuarioResponsavel->name }} <!-- Exibe o nome do responsável -->
-                                @else
-                                    N/A <!-- Exibe "N/A" se o equipamento não estiver emprestado -->
-                                @endif
-                            </td>
-                            
                             <td class="align-middle">
                                 <div class="d-flex flex-column gap-2">
                                     <a href="{{ route('equipamentos.show', $equipamento->id) }}" class="btn btn-info w-100 shadow-sm rounded-pill text-white">
@@ -76,7 +64,7 @@
         </div>
 
         <div class="d-flex justify-content-end mt-3">
-            <a href="{{ route('home.index') }}"  class="btn btn-secondary w-auto shadow-sm rounded-pill" style="background-color: #6c757d; color: white;">
+            <a href="{{ route('home.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill" style="background-color: #6c757d; color: white;">
                 <i class="fas fa-arrow-left"></i> Voltar
             </a>
         </div>

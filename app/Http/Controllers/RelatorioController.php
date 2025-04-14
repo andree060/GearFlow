@@ -4,76 +4,71 @@ namespace App\Http\Controllers;
 
 use App\Models\Emprestimos;
 use App\Models\Equipamentos;
+use App\Models\Setor;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class RelatorioController extends Controller
 {
-    /**
-     * Exibe o relatório com as informações gerais.
-     *
-     * @param Request $request
-     * @return \Illuminate\View\View
-     */
     public function index(Request $request)
     {
-        // Obtendo as datas de filtro, caso existam
         $dataInicio = $request->input('data_inicio') ? Carbon::parse($request->input('data_inicio')) : null;
         $dataFim = $request->input('data_fim') ? Carbon::parse($request->input('data_fim')) : null;
 
-        // Consultando os dados do banco com base nas datas
+        // Query para obter os empréstimos no período selecionado
         $emprestimosQuery = Emprestimos::with('user', 'equipamento')
-            ->when($dataInicio, function ($query) use ($dataInicio) {
-                return $query->where('data_emprestimo', '>=', $dataInicio);
-            })
-            ->when($dataFim, function ($query) use ($dataFim) {
-                return $query->where('data_emprestimo', '<=', $dataFim);
-            });
+            ->when($dataInicio, fn($query) => $query->where('data_emprestimo', '>=', $dataInicio))
+            ->when($dataFim, fn($query) => $query->where('data_emprestimo', '<=', $dataFim));
 
         $emprestimos = $emprestimosQuery->get();
 
-        // Contagem dos dados de equipamentos diretamente no banco
+        // Totais por status de equipamentos
         $totalEquipamentos = Equipamentos::count();
         $totalEquipamentosDisponiveis = Equipamentos::where('status', 'disponível')->count();
-        $totalEquipamentosEmEmprestimo = Equipamentos::where('status', 'emprestado')->count();
         $totalEquipamentosIndisponiveis = Equipamentos::where('status', 'indisponível')->count();
-        $totalEquipamentosDevolvidos = Equipamentos::where('status', 'devolvido')->count();
-        $totalEquipamentosEmManutencao = Equipamentos::where('status', 'em manutenção')->count();
-        $totalEquipamentosFuncionando = Equipamentos::where('status', 'funcionando')->count(); // Nova variável para equipamentos funcionando
 
-        // Contagem dos dados de empréstimos
-        $totalEmprestimosAtivos = $emprestimos->filter(function ($emprestimo) {
-            return is_null($emprestimo->data_devolucao); // Empréstimo ativo
-        })->count();
+        $totalEquipamentosDevolvidos = Equipamentos::join('emprestimos', 'equipamentos.id', '=', 'emprestimos.equipamento_id')
+            ->whereNotNull('emprestimos.data_devolucao')
+            ->count();
 
-        $totalEmprestimosDevolvidos = $emprestimos->filter(function ($emprestimo) {
-            return !is_null($emprestimo->data_devolucao); // Empréstimo devolvido
-        })->count();
+        $totalEquipamentosEmManutencao = Equipamentos::join('manutencao', 'equipamentos.id', '=', 'manutencao.equipamento_id')
+            ->where('manutencao.status', 'Em Manutenção')
+            ->count();
 
-        // Contagem de usuários cadastrados
+        $totalEquipamentosManutencaoConcluida = Equipamentos::join('manutencao', 'equipamentos.id', '=', 'manutencao.equipamento_id')
+            ->where('manutencao.status', 'Manutenção Concluida')
+            ->count();
+
+        // Contando os empréstimos ativos e devolvidos
+        $totalEmprestimosAtivos = $emprestimos->whereNull('data_devolucao')->count();
+        $totalEmprestimosDevolvidos = $emprestimos->whereNotNull('data_devolucao')->count();
+
+        // Total de usuários
         $totalUsuarios = User::count();
 
-        // Variável para verificar se não existem empréstimos para o período
+        // Verificando se existem empréstimos
         $nenhumEmprestimo = $emprestimos->isEmpty();
 
-        // Retornando para a visão com as variáveis
+        // Carregando setores com seus respectivos equipamentos
+        $setores = Setor::with('equipamentos')->get();
+
+        // Retornando os dados para a view
         return view('relatorio.index', compact(
             'dataInicio',
             'dataFim',
             'totalEquipamentos',
             'totalEquipamentosDisponiveis',
-            'totalEquipamentosEmEmprestimo',
             'totalEquipamentosIndisponiveis',
             'totalEquipamentosDevolvidos',
-            'totalEquipamentosEmManutencao', // Incluído na lista de variáveis passadas para a visão
-            'totalEquipamentosFuncionando', // Incluído a variável para equipamentos funcionando
+            'totalEquipamentosEmManutencao',
+            'totalEquipamentosManutencaoConcluida',
             'totalEmprestimosAtivos',
             'totalEmprestimosDevolvidos',
             'totalUsuarios',
             'nenhumEmprestimo',
-            'emprestimos'
+            'emprestimos',
+            'setores'
         ));
     }
 }
-

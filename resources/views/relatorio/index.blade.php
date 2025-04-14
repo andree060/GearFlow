@@ -3,12 +3,10 @@
 @section('title', 'Relatórios - Sistema de Empréstimos')
 
 @section('content')
-    <!-- Cabeçalho de Relatório -->
-    <h1 class="text-center mb-4 font-weight-bold animated fadeIn" style="font-size: 3rem; color: #343a40; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);">
+    <h1 class="text-center mb-4 font-weight-bold animated fadeIn" style="font-size: 3rem; color: #343a40;">
         Relatórios de Equipamentos e Empréstimos
     </h1>
 
-    <!-- Filtro de Data -->
     <form method="GET" action="{{ route('relatorio.index') }}" class="mb-4">
         <div class="row">
             <div class="col-md-3">
@@ -26,25 +24,24 @@
         </div>
     </form>
 
-    <!-- Exibindo as Datas Selecionadas -->
     @if ($dataInicio && $dataFim)
-        <div class="alert alert-info text-center mb-4 shadow-sm animated fadeIn" style="animation-delay: 0.5s;">
+        <div class="alert alert-info text-center mb-4 shadow-sm animated fadeIn">
             <strong>Período Selecionado:</strong> {{ $dataInicio->format('d/m/Y') }} até {{ $dataFim->format('d/m/Y') }}
         </div>
     @elseif ($dataInicio)
-        <div class="alert alert-info text-center mb-4 shadow-sm animated fadeIn" style="animation-delay: 0.5s;">
+        <div class="alert alert-info text-center mb-4 shadow-sm animated fadeIn">
             <strong>Data de Início:</strong> {{ $dataInicio->format('d/m/Y') }}
         </div>
     @elseif ($dataFim)
-        <div class="alert alert-info text-center mb-4 shadow-sm animated fadeIn" style="animation-delay: 0.5s;">
+        <div class="alert alert-info text-center mb-4 shadow-sm animated fadeIn">
             <strong>Data de Fim:</strong> {{ $dataFim->format('d/m/Y') }}
         </div>
     @endif
-    <!-- Tabela de Empréstimos -->
+
     @if ($dataInicio || $dataFim)
         @if ($emprestimos->count() > 0)
-            <table class="table table-hover table-striped table-bordered shadow-sm animated fadeInUp" style="border-radius: 10px; overflow: hidden; animation-delay: 1s;">
-                <thead class="thead-dark" style="background-color: #007bff; color: white;">
+            <table class="table table-hover table-striped table-bordered shadow-sm animated fadeInUp">
+                <thead class="thead-dark">
                     <tr>
                         <th>Data de Empréstimo</th>
                         <th>Usuário</th>
@@ -57,39 +54,40 @@
                         <tr>
                             <td class="text-center">{{ \Carbon\Carbon::parse($emprestimo->data_emprestimo)->format('d/m/Y') }}</td>
                             <td>{{ $emprestimo->user->name }}</td>
-                            <td>{{ $emprestimo->equipamento ? $emprestimo->equipamento->nome : 'Equipamento não atribuído' }}</td>
+                            <td>{{ $emprestimo->equipamento->nome ?? 'Equipamento não atribuído' }}</td>
                             <td class="text-center">
-                                @if ($emprestimo->equipamento && $emprestimo->equipamento->status == 'disponível')
-                                    <span class="badge bg-success">Disponível</span>
-                                @elseif ($emprestimo->equipamento && $emprestimo->equipamento->status == 'indisponível')
-                                    <span class="badge bg-danger">Indisponível</span>
-                                @elseif ($emprestimo->equipamento && $emprestimo->equipamento->status == 'emprestado')
-                                    <span class="badge bg-warning">Emprestado</span>
-                                @else
-                                    <span class="badge bg-danger">Indisponível</span>
-                                @endif
+                                @php $status = $emprestimo->equipamento->status ?? 'indisponível'; @endphp
+                                <span class="badge
+                                    @if ($status == 'disponível') bg-success
+                                    @elseif ($status == 'indisponível') bg-danger
+                                    @elseif ($status == 'devolvido') bg-info
+                                    @elseif ($status == 'em manutenção') bg-secondary
+                                    @elseif ($status == 'Manutenção Concluida') bg-primary
+                                    @else bg-dark
+                                    @endif
+                                ">
+                                    {{ ucfirst($status) }}
+                                </span>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         @else
-            <div class="alert alert-warning text-center shadow-sm animated fadeIn" style="animation-delay: 1.5s;">
+            <div class="alert alert-warning text-center shadow-sm animated fadeIn">
                 Nenhum empréstimo encontrado para o período selecionado.
             </div>
         @endif
     @endif
 
-    <!-- Visão Geral dos Dados -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4 animated fadeInUp" style="animation-delay: 2s;">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4 animated fadeInUp">
         @foreach ([
             ['title' => 'Equipamentos Totais', 'value' => $totalEquipamentos],
             ['title' => 'Equipamentos Disponíveis', 'value' => $totalEquipamentosDisponiveis],
-            ['title' => 'Equipamentos Emprestados', 'value' => $totalEquipamentosEmEmprestimo],
             ['title' => 'Equipamentos Indisponíveis', 'value' => $totalEquipamentosIndisponiveis],
-            ['title' => 'Equipamentos Devolvidos', 'value' => $totalEquipamentosDevolvidos],
+            ['title' => 'Equipamentos Emprestado|Devolvidos', 'value' => $totalEquipamentosDevolvidos],
             ['title' => 'Equipamentos em Manutenção', 'value' => $totalEquipamentosEmManutencao],
-            ['title' => 'Equipamentos Funcionando', 'value' => $totalEquipamentosFuncionando],
+            ['title' => 'Equipamentos em Manutenção Concluida', 'value' => $totalEquipamentosManutencaoConcluida],
             ['title' => 'Empréstimos Ativos', 'value' => $totalEmprestimosAtivos],
             ['title' => 'Usuários Cadastrados', 'value' => $totalUsuarios],
         ] as $card)
@@ -104,8 +102,7 @@
         @endforeach
     </div>
 
-    <!-- Seção de Gráficos -->
-    <div class="row d-flex justify-content-between g-4 animated fadeInUp" style="animation-delay: 3s;">
+    <div class="row d-flex justify-content-between g-4 animated fadeInUp">
         <div class="col-md-4">
             <div class="card shadow-lg rounded-3">
                 <div class="card-body">
@@ -131,83 +128,117 @@
             </div>
         </div>
     </div>
+
+    <div class="mt-5">
+        <h2 class="text-center mb-4">Setores e Equipamentos Relacionados</h2>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach($setores as $setor)
+                <div class="col mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">{{ $setor->nome }}</h5>
+                        </div>
+                        <div class="card-body">
+                            @if($setor->equipamentos->count() > 0)
+                                <ul class="list-group list-group-flush">
+                                    @foreach($setor->equipamentos as $equipamento)
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            {{ $equipamento->nome }}
+                                            <span class="badge
+                                                @if($equipamento->status == 'disponível') bg-success
+
+                                                @elseif($equipamento->status == 'indisponível') bg-danger
+                                                @elseif($equipamento->status == 'em manutenção') bg-secondary
+                                                @elseif($equipamento->status == 'Manutenção Concluida') bg-info
+                                                @elseif($equipamento->status == 'devolvido') bg-primary
+                                                @else bg-dark
+                                                @endif
+                                            ">
+                                                {{ ucfirst($equipamento->status) }}
+                                            </span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p class="text-muted">Nenhum equipamento cadastrado neste setor.</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
-    <!-- Importando o Chart.js para os gráficos -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var chartOptions = {
-            responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: 1,
-            animation: {
-                duration: 1000,  // Animação de 1 segundo
-                easing: 'easeOutBounce' // Efeito de "bounce"
-            },
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    backgroundColor: '#000',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    bodyFont: {
-                        size: 14
-                    }
-                }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var chartOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio: 1,
+        animation: {
+            duration: 1000,
+            easing: 'easeOutBounce'
+        },
+        plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+                backgroundColor: '#000',
+                titleColor: '#fff',
+                bodyColor: '#fff',
+                bodyFont: { size: 14 }
             }
-        };
+        }
+    };
 
-        // Gráfico de Empréstimos
-        var ctx1 = document.getElementById('emprestimosChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'doughnut',
-            data: {
-                labels: ['Ativos', 'Devolvidos'],
-                datasets: [{
-                    data: [{{ $totalEmprestimosAtivos }}, {{ $totalEmprestimosDevolvidos }}],
-                    backgroundColor: ['#4caf50', '#2196f3'],
-                    borderWidth: 4,
-                    hoverOffset: 20
-                }]
-            },
-            options: chartOptions
-        });
+    new Chart(document.getElementById('emprestimosChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Ativos', 'Devolvidos'],
+            datasets: [{
+                data: [{{ $totalEmprestimosAtivos }}, {{ $totalEmprestimosDevolvidos }}],
+                backgroundColor: ['#4caf50', '#2196f3'],
+                borderWidth: 4,
+                hoverOffset: 20
+            }]
+        },
+        options: chartOptions
+    });
 
-        // Gráfico de Equipamentos
-        var ctx2 = document.getElementById('equipamentosChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'pie',
-            data: {
-                labels: ['Disponíveis', 'Emprestados', 'Indisponíveis', 'Devolvidos', 'Em Manutenção', 'Funcionando'],
-                datasets: [{
-                    data: [{{ $totalEquipamentosDisponiveis }}, {{ $totalEquipamentosEmEmprestimo }}, {{ $totalEquipamentosIndisponiveis }}, {{ $totalEquipamentosDevolvidos }}, {{ $totalEquipamentosEmManutencao }}, {{ $totalEquipamentosFuncionando }}],
-                    backgroundColor: ['#4caf50', '#ff9800', '#f44336', '#2196f3', '#9e9e9e', '#00bcd4'],
-                    borderWidth: 4
-                }]
-            },
-            options: chartOptions
-        });
+    new Chart(document.getElementById('equipamentosChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Disponíveis', 'Indisponíveis', 'Devolvidos', 'Em Manutenção', 'Em Manutenção Concluida'],
+            datasets: [{
+                data: [
+                    {{ $totalEquipamentosDisponiveis }},
+                    {{ $totalEquipamentosIndisponiveis }},
+                    {{ $totalEquipamentosIndisponiveis }},
+                    {{ $totalEquipamentosDevolvidos }},
+                    {{ $totalEquipamentosEmManutencao }},
+                    {{ $totalEquipamentosManutencaoConcluida }}
+                ],
+                backgroundColor: ['#4caf50', '#f44336', '#2196f3', '#ff9800', '#9e9e9e', '#00bcd4'],
+                borderWidth: 4
+            }]
+        },
+        options: chartOptions
+    });
 
-        // Gráfico de Usuários
-        var ctx3 = document.getElementById('usuariosChart').getContext('2d');
-        new Chart(ctx3, {
-            type: 'bar',
-            data: {
-                labels: ['Total de Usuários'],
-                datasets: [{
-                    label: 'Usuários Cadastrados',
-                    data: [{{ $totalUsuarios }}],
-                    backgroundColor: '#2196f3',
-                    borderColor: '#1976d2',
-                    borderWidth: 4,
-                    borderRadius: 10,
-                }]
-            },
-            options: chartOptions
-        });
-    </script>
+    new Chart(document.getElementById('usuariosChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Total de Usuários'],
+            datasets: [{
+                label: 'Usuários Cadastrados',
+                data: [{{ $totalUsuarios }}],
+                backgroundColor: '#2196f3',
+                borderWidth: 4
+            }]
+        },
+        options: chartOptions
+    });
+</script>
 @endsection
-

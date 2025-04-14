@@ -47,7 +47,7 @@
                                     </a>
 
                                     <!-- Botão Marcar como Funcionando -->
-                                    @if($manutencaos->status != 'Funcionando')
+                                    @if($manutencaos->status != 'Manutenção Concluida')
                                         <form action="{{ route('manutencao.update', $manutencaos->id) }}" method="POST" style="display:inline;" onsubmit="return confirmMarkAsWorking()">
                                             @csrf
                                             @method('PUT')
@@ -55,10 +55,10 @@
                                             <input type="hidden" name="data_manutencao" value="{{ $manutencaos->data_manutencao }}">
                                             <input type="hidden" name="descricao" value="{{ $manutencaos->descricao }}">
                                             <input type="hidden" name="responsavel" value="{{ $manutencaos->responsavel }}">
-                                            <input type="hidden" name="status" value="Funcionando"> <!-- Alterando o status -->
+                                            <input type="hidden" name="status" value="Manutenção Concluida"> <!-- Alterando o status -->
                                             <input type="hidden" name="proxima_manutencao" value="{{ $manutencaos->proxima_manutencao }}">
                                             <button type="submit" class="btn btn-success w-100 shadow-sm rounded-pill text-white">
-                                                <i class="fas fa-check"></i> Marcar como Funcionando
+                                                <i class="fas fa-check"></i>Manutenção Concluida
                                             </button>
                                         </form>
                                     @endif
@@ -110,7 +110,7 @@
 
         // Função para confirmar a marcação como "Funcionando"
         function confirmMarkAsWorking() {
-            return confirm('Tem certeza que deseja marcar esta manutenção como funcionando?');
+            return confirm('Tem certeza que deseja marcar esta manutenção como Concluida?');
         }
     </script>
 @endsection

@@ -48,7 +48,7 @@
                         <label for="status" class="form-label">Status</label>
                         <select name="status" id="status" class="form-control" required>
                             <option value="Em Manutenção" selected>Em Manutenção</option>
-                            <option value="Funcionando">Funcionando</option>
+                            <option value="Manutenção Concluida">Manutenção Concluida</option>
                         </select>
                     </div>
 

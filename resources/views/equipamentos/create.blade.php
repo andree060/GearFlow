@@ -22,14 +22,14 @@
 
                     <!-- Campo Nome -->
                     <div class="mb-3">
-                        <label for="nome" class="form-label">Nome</label>
-                        <input type="text" name="nome" id="nome" class="form-control" required>
+                        <label for="nome" class="form-label">Nome do Equipamento</label>
+                        <input type="text" name="nome" id="nome" class="form-control" required placeholder="Informe o nome do equipamento">
                     </div>
 
                     <!-- Campo Número de Série -->
                     <div class="mb-3">
                         <label for="numero_serie" class="form-label">Número de Série</label>
-                        <input type="text" name="numero_serie" id="numero_serie" class="form-control" required>
+                        <input type="text" name="numero_serie" id="numero_serie" class="form-control" required placeholder="Informe o número de série">
                     </div>
 
                     <!-- Campo Status -->
@@ -37,32 +37,42 @@
                         <label for="status" class="form-label">Status</label>
                         <select name="status" id="status" class="form-control" required>
                             <option value="disponível">Disponível</option>
-                            <option value="emprestado">Emprestado</option>
                             <option value="indisponível">Indisponível</option>
                         </select>
                     </div>
 
-                    <!-- Campo Categoria (Nome da categoria) -->
+                    <!-- Campo Categoria -->
                     <div class="mb-3">
-                        <label for="categoria_nome" class="form-label">Categoria</label>
-                        <input type="text" name="categoria_nome" id="categoria_nome" class="form-control" required>
-                    </div>
-
-                    <!-- Campo Setor (Nome do setor) -->
-                    <div class="mb-3">
-                        <label for="setor_nome" class="form-label">Setor</label>
-                        <input type="text" name="setor_nome" id="setor_nome" class="form-control" required>
-                    </div>
-
-                    <!-- Campo Usuário Responsável (apenas se o status for "emprestado") -->
-                    <div class="mb-3" id="usuario_responsavel_div" style="display: none;">
-                        <label for="usuario_responsavel" class="form-label">Usuário Responsável</label>
-                        <select name="usuario_responsavel" id="usuario_responsavel" class="form-control">
-                            <option value="">Selecione um usuário</option>
-                            @foreach($usuarios as $usuario)
-                                <option value="{{ $usuario->id }}">{{ $usuario->name }}</option>
+                        <label for="categoria_id" class="form-label">Categoria</label>
+                        <select name="categoria_id" id="categoria_id" class="form-control">
+                            <option value="">Escolha uma categoria existente</option>
+                            @foreach($categorias as $categoria)
+                                <option value="{{ $categoria->id }}">{{ $categoria->nome }}</option>
                             @endforeach
                         </select>
+
+                        <!-- Campo para criar nova categoria -->
+                        <div class="mt-3">
+                            <label for="categoria_nome" class="form-label">Ou crie uma nova categoria</label>
+                            <input type="text" name="categoria_nome" id="categoria_nome" class="form-control" placeholder="Digite o nome da nova categoria">
+                        </div>
+                    </div>
+
+                    <!-- Campo Setor -->
+                    <div class="mb-3">
+                        <label for="setor_id" class="form-label">Setor</label>
+                        <select name="setor_id" id="setor_id" class="form-control">
+                            <option value="">Escolha um setor existente</option>
+                            @foreach($setores as $setor)
+                                <option value="{{ $setor->id }}">{{ $setor->nome }}</option>
+                            @endforeach
+                        </select>
+
+                        <!-- Campo para criar novo setor -->
+                        <div class="mt-3">
+                            <label for="setor_nome" class="form-label">Ou crie um novo setor</label>
+                            <input type="text" name="setor_nome" id="setor_nome" class="form-control" placeholder="Digite o nome do novo setor">
+                        </div>
                     </div>
 
                     <!-- Botões -->
@@ -74,18 +84,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        // Exibe o campo de usuário responsável apenas se o status for "emprestado"
-        document.getElementById('status').addEventListener('change', function () {
-            const usuarioResponsavelDiv = document.getElementById('usuario_responsavel_div');
-            const status = this.value;
-
-            if (status === 'emprestado') {
-                usuarioResponsavelDiv.style.display = 'block';
-            } else {
-                usuarioResponsavelDiv.style.display = 'none';
-            }
-        });
-    </script>
 @endsection

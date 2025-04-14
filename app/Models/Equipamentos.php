@@ -10,7 +10,16 @@ class Equipamentos extends Model
     use HasFactory;
 
     protected $table = 'equipamentos';
-    protected $fillable = ['nome', 'numero_serie', 'status', 'categoria_id', 'setor_id', 'usuario_responsavel'];
+
+    protected $fillable = [
+        'nome',
+        'numero_serie',
+        'status', // Esse campo ainda é útil para casos como "disponível", "emprestado", etc.
+        'categoria_id',
+        'setor_id',
+    ];
+
+    // Relacionamentos
 
     public function emprestimos()
     {
@@ -27,34 +36,40 @@ class Equipamentos extends Model
         return $this->belongsTo(Setor::class, 'setor_id');
     }
 
-    public function usuarioResponsavel()
-    {
-        return $this->belongsTo(User::class, 'usuario_responsavel');
-    }
-
     public function manutencoes()
     {
         return $this->hasMany(Manutencao::class, 'equipamento_id');
     }
 
+    // Métodos auxiliares
+
+    /**
+     * Retorna o status atual com base na última manutenção.
+     */
     public function statusAtual()
     {
         $ultimaManutencao = $this->manutencoes()->latest('data_manutencao')->first();
 
-        if ($ultimaManutencao && $ultimaManutencao->status !== 'Funcionando') {
-            return 'Em Manutenção';
+        if ($ultimaManutencao && strtolower($ultimaManutencao->status) !== 'Manutenção Concluida') {
+            return 'em manutenção';
         }
 
-        return 'Funcionando';
+        return 'Manutenção Concluida';
     }
 
+    /**
+     * Verifica se o equipamento está em manutenção.
+     */
     public function isEmManutencao()
     {
-        return $this->statusAtual() === 'Em Manutenção';
+        return $this->statusAtual() === 'em manutenção';
     }
 
+    /**
+     * Verifica se o equipamento está funcionando.
+     */
     public function isFuncionando()
     {
-        return $this->statusAtual() === 'Funcionando';
+        return $this->statusAtual() === 'Manutenção Concluida';
     }
 }

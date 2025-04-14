@@ -35,20 +35,12 @@
                     <label for="equipamento_id" class="form-label">Equipamento</label>
                     <select name="equipamento_id" id="equipamento_id" class="form-select" required onchange="showEquipamentoDetails()">
                         @foreach($equipamentos as $equipamento)
-                            <option 
+                            <option
                                 value="{{ $equipamento->id }}"
                                 data-categoria="{{ optional($equipamento->categoria)->nome }}"
                                 data-setor="{{ optional($equipamento->setor)->nome }}"
-                                data-status="{{ $equipamento->statusAtual() }}"
-                                style="background-color: 
-                                    {{ $equipamento->statusAtual() === 'funcionando' ? 'green' : 
-                                       ($equipamento->statusAtual() === 'manutenção' ? 'red' : '') }}"
-                                @if($equipamento->isEmManutencao()) disabled @endif
                             >
                                 {{ $equipamento->nome }}
-                                @if($equipamento->manutencoes->count() > 0)
-                                    - {{ $equipamento->statusAtual() }}
-                                @endif
                             </option>
                         @endforeach
                     </select>
@@ -112,7 +104,6 @@
 
         const categoria = equipamento.getAttribute('data-categoria');
         const setor = equipamento.getAttribute('data-setor');
-        const status = equipamento.getAttribute('data-status');
 
         document.getElementById('categoria').value = categoria || '';
         document.getElementById('setor').value = setor || '';

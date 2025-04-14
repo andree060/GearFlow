@@ -27,7 +27,7 @@
                         <label for="equipamento_id" class="form-label">Equipamento</label>
                         <select name="equipamento_id" id="equipamento_id" class="form-control" required>
                             @foreach ($equipamentos as $equipamento)
-                                <option value="{{ $equipamento->id }}" 
+                                <option value="{{ $equipamento->id }}"
                                     @if($manutencao->equipamento_id == $equipamento->id) selected @endif>
                                     {{ $equipamento->nome }}
                                 </option>
@@ -58,7 +58,7 @@
                         <label for="status" class="form-label">Status</label>
                         <select name="status" id="status" class="form-control" required>
                             <option value="Em Manutenção" @if($manutencao->status == 'Em Manutenção') selected @endif>Em Manutenção</option>
-                            <option value="Funcionando" @if($manutencao->status == 'Funcionando') selected @endif>Funcionando</option>
+                            <option value="Manutenção Concluida" @if($manutencao->status == 'Manutenção Concluida') selected @endif>Manutenção Concluida</option>
                         </select>
                     </div>
 
