@@ -55,15 +55,19 @@ Route::middleware('auth')->group(function () {
     Route::get('emprestimos/{id}/edit', [EmprestimosController::class, 'edit'])->name('emprestimos.edit'); // Editar empréstimo
     Route::put('emprestimos/{id}', [EmprestimosController::class, 'update'])->name('emprestimos.update'); // Atualiza o empréstimo
     Route::delete('emprestimos/{id}', [EmprestimosController::class, 'destroy'])->name('emprestimos.destroy'); // Exclui o empréstimo
+
+
+    // Rotas para Manutenção
+    Route::get('manutencao', [ManutencaoController::class, 'index'])->name('manutencao.index'); // Lista todas as manutenções
+    Route::get('manutencao/create', [ManutencaoController::class, 'create'])->name('manutencao.create'); // Formulário para criar nova manutenção
+    Route::post('manutencao', [ManutencaoController::class, 'store'])->name('manutencao.store'); // Armazena a manutenção
+    Route::get('manutencao/{id}', [ManutencaoController::class, 'show'])->name('manutencao.show'); // Exibe detalhes da manutenção
+    Route::get('manutencao/{id}/edit', [ManutencaoController::class, 'edit'])->name('manutencao.edit'); // Formulário de edição da manutenção
+    Route::put('manutencao/{id}', [ManutencaoController::class, 'update'])->name('manutencao.update'); // Atualiza a manutenção
+    Route::delete('manutencao/{id}', [ManutencaoController::class, 'destroy'])->name('manutencao.destroy'); // Exclui a manutenção
 });
 
-Route::get('manutencao', [ManutencaoController::class, 'index'])->name('manutencao.index'); // Lista todas as manutenções
-Route::get('manutencao/create', [ManutencaoController::class, 'create'])->name('manutencao.create'); // Formulário para criar nova manutenção
-Route::post('manutencao', [ManutencaoController::class, 'store'])->name('manutencao.store'); // Armazena a manutenção
-Route::get('manutencao/{id}', [ManutencaoController::class, 'show'])->name('manutencao.show'); // Exibe detalhes da manutenção
-Route::get('manutencao/{id}/edit', [ManutencaoController::class, 'edit'])->name('manutencao.edit'); // Formulário de edição da manutenção
-Route::put('manutencao/{id}', [ManutencaoController::class, 'update'])->name('manutencao.update'); // Atualiza a manutenção
-Route::delete('manutencao/{id}', [ManutencaoController::class, 'destroy'])->name('manutencao.destroy'); // Exclui a manutenção
+
 
 
 require __DIR__.'/auth.php';

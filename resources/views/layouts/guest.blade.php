@@ -29,134 +29,131 @@
         </div>
     </div>
 
-    <!-- Estilos adicionais (CSS direto no layout) -->
+    <!-- Estilos personalizados -->
     <style>
-        /* Cor de fundo principal */
-        body {
-            background-color: #ebf8ff; /* Azul claro */
-            font-family: 'Figtree', sans-serif;
-        }
+    /* Cor de fundo principal */
+    body {
+        background-color: #ebf8ff; /* Azul claro */
+        font-family: 'Figtree', sans-serif;
+    }
 
-        /* Cabeçalho estilizado */
-        .bg-blue-600 {
-            background-color: #3182ce; /* Azul vibrante */
-        }
+    /* Cabeçalho estilizado */
+    .bg-blue-600 {
+        background-color: #3182ce !important; /* Azul vibrante */
+        color: white !important;
+        padding: 12px 20px;
+        border: none;
+        width: auto; /* Para não ocupar toda a largura */
 
-        /* Texto do cabeçalho */
-        h1 {
-            font-size: 2rem;
-            font-weight: bold;
-        }
+        text-align: center;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
 
-        p {
-            font-size: 1rem;
-        }
+    .bg-blue-600:hover {
+        background-color: #3182ce !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-        /* Estilo do conteúdo */
-        .w-full {
-            width: 100%;
-        }
+    /* Texto do cabeçalho */
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
 
-        .sm:max-w-md {
-            max-width: 500px;
-        }
+    p {
+        font-size: 1rem;
+    }
 
-        /* Card de formulário */
-        .bg-white {
-            background-color: rgb(255, 255, 255);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
-            border-radius: 16px;
-            transition: box-shadow 0.3s ease; /* Transição para o efeito de hover */
-        }
+    /* Estilo do conteúdo */
+    .w-full {
+        width: 100%;
+    }
 
-        .bg-white:hover {
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Sombra mais forte ao passar o mouse */
-        }
+    .sm\:max-w-md {
+        max-width: 500px;
+    }
 
-        /* Campos de entrada */
-        input[type="text"], input[type="email"], input[type="password"] {
-            background-color: #edf2f7; /* Fundo cinza claro */
-            border: 1px solid #cbd5e0;
-            padding: 12px 16px;
-            width: 100%;
-            font-size: 1rem;
-            margin-top: 8px;
-            border-radius: 8px;
-            transition: all 0.3s ease-in-out;
-        }
+    /* Card de formulário */
+    .bg-white {
+        background-color: rgb(255, 255, 255);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 16px;
+        transition: box-shadow 0.3s ease;
+    }
 
-        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
-            border-color: #3182ce; /* Azul do foco */
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.3); /* Foco mais suave */
-        }
+    .bg-white:hover {
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
 
-        /* Botões - azul fixo */
-        .btn-primary {
-            background-color: #3182ce; /* Azul fixo */
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            width: 100%;
-            font-size: 1.125rem;
-            margin-top: 16px;
-            cursor: pointer;
-            border: none; /* Remover borda se houver */
-        }
+    /* Campos de entrada */
+    input[type="text"], input[type="email"], input[type="password"] {
+        background-color: #edf2f7;
+        border: 1px solid #cbd5e0;
+        padding: 12px 16px;
+        width: 100%;
+        font-size: 1rem;
+        margin-top: 8px;
+        border-radius: 8px;
+        transition: all 0.3s ease-in-out;
+        color: #2d3748;
+    }
 
-        /* Remover efeito de hover nos botões */
-        .btn-primary:hover {
-            background-color: #3182ce; /* A cor azul permanece igual */
-            transform: none; /* Sem movimento no hover */
-        }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+        border-color: #3182ce;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.3);
+    }
 
-        /* Labels e textos */
-        label {
-            font-size: 1rem;
-            font-weight: bold;
-            color: #2d3748; /* Texto mais escuro para boa legibilidade */
-        }
+    /* Labels e textos */
+    label {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #2d3748;
+    }
 
-        .text-black {
-            color: #333;
-        }
+    .text-black {
+        color: #333;
+    }
 
-        .text-lg {
-            font-size: 1.125rem;
-        }
+    .text-lg {
+        font-size: 1.125rem;
+    }
 
-        .text-sm {
-            font-size: 0.875rem;
-        }
+    .text-sm {
+        font-size: 0.875rem;
+    }
 
-        /* Links e interação */
-        .hover\:underline:hover {
-            text-decoration: underline;
-        }
+    /* Links e interação */
+    .hover\:underline:hover {
+        text-decoration: underline;
+    }
 
-        /* Efeito de transição suave nos inputs e botões */
-        .transition-all {
-            transition: all 0.3s ease;
-        }
+    /* Efeito de transição suave nos inputs e botões */
+    .transition-all {
+        transition: all 0.3s ease;
+    }
 
-        /* Estilo para o botão de "Lembrar-me" */
-        .flex.items-center {
-            align-items: center;
-        }
+    /* Estilo para o checkbox "Lembrar-me" */
+    .flex.items-center {
+        align-items: center;
+    }
 
-        /* Ajustes de fundo */
-        .bg-blue-50 {
-            background-color: #ebf8ff; /* Azul muito claro */
-        }
+    /* Ajustes de fundo */
+    .bg-blue-50 {
+        background-color: #ebf8ff;
+    }
 
-        .shadow-lg {
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); /* Sombra mais forte */
-        }
+    .shadow-lg {
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
 
-        /* Ajuste de bordas nos campos de input */
-        .rounded-lg {
-            border-radius: 16px; /* Bordas mais arredondadas */
-        }
-    </style>
+    .rounded-lg {
+        border-radius: 16px;
+    }
+</style>
+
 </body>
 </html>
