@@ -31,7 +31,7 @@
                 @csrf
 
                 <!-- Equipamento -->
-                <div class="mb-3">
+            <div class="mb-3">
                     <label for="equipamento_id" class="form-label">Equipamento</label>
                     <select name="equipamento_id" id="equipamento_id" class="form-select" required onchange="showEquipamentoDetails()">
                         @foreach($equipamentos as $equipamento)
@@ -45,6 +45,7 @@
                         @endforeach
                     </select>
                 </div>
+
 
                 <!-- Categoria -->
                 <div class="mb-3">

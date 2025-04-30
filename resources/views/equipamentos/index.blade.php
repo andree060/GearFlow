@@ -18,6 +18,7 @@
             <table class="table table-bordered table-striped table-hover shadow-sm rounded-3">
                 <thead class="table-dark">
                     <tr>
+                        <th>ID</th>
                         <th>Nome</th>
                         <th>Número de Série</th>
                         <th>Status</th>
@@ -27,6 +28,7 @@
                 <tbody>
                     @foreach($equipamentos as $equipamento)
                         <tr>
+                            <td class="align-middle">{{ $equipamento->id }}</td>
                             <td class="align-middle">{{ $equipamento->nome }}</td>
                             <td class="align-middle">{{ $equipamento->numero_serie }}</td>
                             <td class="align-middle">

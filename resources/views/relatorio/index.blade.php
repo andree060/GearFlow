@@ -152,7 +152,7 @@
                                                 @elseif($equipamento->status == 'em manutenção') bg-secondary
                                                 @elseif($equipamento->status == 'Manutenção Concluida') bg-info
                                                 @elseif($equipamento->status == 'devolvido') bg-primary
-                                                @else bg-dark
+                                                @else bg-danger
                                                 @endif
                                             ">
                                                 {{ ucfirst($equipamento->status) }}

@@ -14,17 +14,19 @@
             <table class="table table-bordered table-striped table-hover shadow-sm rounded-3">
                 <thead class="table-dark">
                     <tr>
+                        <th>ID</th> <!-- Adicionei esta coluna -->
                         <th>Equipamento</th>
                         <th>Usuário</th>
                         <th>Data Empréstimo</th>
-                        <th>Devolvido</th> <!-- Nova coluna para mostrar "Sim" se foi devolvido -->
-                        <th>Data Devolução</th> <!-- Exibe a data de devolução -->
+                        <th>Devolvido</th>
+                        <th>Data Devolução</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($emprestimos as $emprestimo)
                         <tr class="table-row">
+                            <td class="align-middle">{{ $emprestimo->id }}</td> <!-- Exibe o ID do empréstimo -->
                             <td class="align-middle">
                                 @if($emprestimo->equipamento)
                                     {{ $emprestimo->equipamento->nome }}
@@ -36,12 +38,10 @@
                             <td class="align-middle">{{ \Carbon\Carbon::parse($emprestimo->data_emprestimo)->format('d/m/Y') }}</td>
                             <td class="align-middle">
                                 @if($emprestimo->data_devolucao)
-                                    <!-- Exibe "Sim" se o empréstimo foi devolvido -->
                                     <span class="badge bg-success rounded-pill">
                                         <i class="fas fa-check-circle"></i> Sim
                                     </span>
                                 @else
-                                    <!-- Exibe "Não" caso contrário -->
                                     <span class="badge bg-danger rounded-pill">
                                         <i class="fas fa-times-circle"></i> Não
                                     </span>

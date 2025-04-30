@@ -1,6 +1,6 @@
 -- Criar o banco de dados
 CREATE DATABASE IF NOT EXISTS gearFlow;
-USE gearFlow;
+USE Equipia;
 
 -- Criar tabela de Categorias
 CREATE TABLE categorias (
@@ -62,9 +62,9 @@ CREATE TABLE manutencao (
     id INT AUTO_INCREMENT PRIMARY KEY,
     equipamento_id INT NOT NULL,
     data_manutencao DATE NOT NULL,
-    descricao TEXT NOT NULL,
+    descricao TEXT(255) NOT NULL,
     responsavel VARCHAR(255) NOT NULL,
-    status VARCHAR(50) NOT NULL,
+    status VARCHAR(100) NOT NULL,
     custo DECIMAL(8,2) DEFAULT NULL,
     proxima_manutencao DATE DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
