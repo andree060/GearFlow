@@ -91,7 +91,7 @@ class UsuariosController extends Controller
         $usuario->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password ? Hash::make($request->password) : $usuario->password, // Se a senha foi informada, atualiza
+            'password' => $request->password ? Hash::make($request->password) : $usuario->password,
         ]);
     
         // Redireciona para a página de detalhes do usuário com uma mensagem de sucesso

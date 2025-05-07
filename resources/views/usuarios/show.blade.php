@@ -4,48 +4,53 @@
 
 @section('content')
 
-    <!-- Título da página com cor personalizada -->
-    <h1 class="text-center mb-4 font-weight-bold" style="font-size: 3rem; color: #343a40; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);">
-        Detalhes do Usuário
-    </h1>
+<!-- Título da página com cor personalizada -->
+<h1 class="text-center mb-4 font-weight-bold"
+    style="font-size: 3rem; color: #343a40; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);">
+    Detalhes do Usuário
+</h1>
 
-    <div class="container mt-5">
+<div class="container mt-5">
 
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
 
-        <!-- Cartão com detalhes do usuário -->
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <!-- Tabela de detalhes -->
-                <table class="table table-striped">
-                    <tr>
-                        <th>Nome</th>
-                        <td>{{ $usuario->name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td>{{ $usuario->email }}</td>
-                    </tr>
-                </table>
+    <!-- Cartão com detalhes do usuário -->
+    <div class="card shadow-sm">
+        <div class="card-body">
 
-                <div class="d-flex justify-content-start gap-2">
-                    <!-- Botão Editar -->
-                    <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-warning w-auto shadow-sm rounded-pill text-white">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
+            <!-- Tabela de detalhes -->
+            <table class="table table-striped table-bordered shadow-sm rounded">
+                <tr>
+                    <th class="bg-light text-dark fw-semibold">Nome</th>
+                    <td>{{ $usuario->name }}</td>
+                </tr>
+                <tr>
+                    <th class="bg-light text-dark fw-semibold">Email</th>
+                    <td>{{ $usuario->email }}</td>
+                </tr>
+            </table>
 
-                    <!-- Botão Voltar com cor fixa -->
-                    <a href="{{ route('usuarios.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill" style="background-color: #6c757d; color: white;">
-                        <i class="fas fa-arrow-left"></i> Voltar
-                    </a>
-                </div>
+            <!-- Botões de ação -->
+            <div class="d-flex justify-content-start gap-2 mt-4">
+                <!-- Botão Editar -->
+                <a href="{{ route('usuarios.edit', $usuario->id) }}"
+                    class="btn btn-warning w-auto shadow-sm rounded-pill text-white">
+                    <i class="fas fa-edit me-1"></i> Editar
+                </a>
+
+                <!-- Botão Voltar -->
+                <a href="{{ route('usuarios.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill">
+                    <i class="fas fa-arrow-left me-1"></i> Voltar
+                </a>
             </div>
         </div>
 
     </div>
+
+</div>
 
 @endsection

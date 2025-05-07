@@ -108,9 +108,9 @@ class EquipamentosController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'numero_serie' => 'required|string|max:100',
-            'status' => 'required|string|in:disponível,indisponível',
+            'status' => 'required|string|in:disponível,indisponível,emprestado',
             'categoria_nome' => 'required|string',
-            'setor_id' => 'required|string',  // Setor é requerido
+            'setor_id' => 'required|string',  
         ]);
 
         // Encontra o equipamento ou retorna erro 404
