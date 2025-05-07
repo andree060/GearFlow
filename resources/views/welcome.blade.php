@@ -95,7 +95,7 @@
                     @else
                         <!-- Botão de Login -->
                         <a href="{{ route('login') }}" class="btn btn-custom px-4 py-2 login-btn">
-                            Log in
+                            Login
                         </a>
                     @endauth
                 @endif

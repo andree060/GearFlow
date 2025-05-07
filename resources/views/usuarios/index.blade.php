@@ -29,23 +29,23 @@
                             <td class="align-middle">{{ $usuario->name }}</td>
                             <td class="align-middle">{{ $usuario->email }}</td>
                             <td class="align-middle">
-                                <div class="d-flex flex-column gap-2">
+                                <div class="d-flex gap-1 flex-wrap">
                                     <!-- Botão Visualizar -->
-                                    <a href="{{ route('usuarios.show', $usuario->id) }}" class="btn btn-info w-100 shadow-sm rounded-pill text-white">
-                                        <i class="fas fa-eye"></i> Visualizar
+                                    <a href="{{ route('usuarios.show', $usuario->id) }}" class="btn btn-info btn-sm shadow-sm rounded-pill text-white" title="Visualizar">
+                                        <i class="fas fa-eye"></i>
                                     </a>
 
                                     <!-- Botão Editar -->
-                                    <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-warning w-100 shadow-sm rounded-pill text-white" onclick="return confirmEdit()">
-                                        <i class="fas fa-edit"></i> Editar
+                                    <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-warning btn-sm shadow-sm rounded-pill text-white" onclick="return confirmEdit()" title="Editar">
+                                        <i class="fas fa-edit"></i>
                                     </a>
 
                                     <!-- Formulário Excluir -->
                                     <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" class="d-inline" onsubmit="return confirmDelete()">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger w-100 shadow-sm rounded-pill text-white">
-                                            <i class="fas fa-trash-alt"></i> Excluir
+                                        <button type="submit" class="btn btn-danger btn-sm shadow-sm rounded-pill text-white" title="Excluir">
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -68,14 +68,12 @@
 @endsection
 
 @section('scripts')
-    <!-- Adicionando o script JavaScript para confirmação -->
+    <!-- Script JavaScript para confirmação -->
     <script>
-        // Função para confirmar a exclusão de um Usuário
         function confirmDelete() {
             return confirm('Tem certeza que deseja excluir este usuário?');
         }
 
-        // Função para confirmar se o usuário deseja editar o Usuário
         function confirmEdit() {
             return confirm('Tem certeza que deseja editar este usuário?');
         }

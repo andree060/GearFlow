@@ -3,56 +3,69 @@
 @section('content')
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4">
         <!-- Cartão de Equipamentos Totais -->
-        <div class="col">
-            <div class="card animated-card card-hover">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100 animated-card card-hover">
                 <!-- Link que cobre todo o cartão -->
-                <a href="{{ route('equipamentos.index') }}" class="no-style-link">
+                <a href="{{ route('equipamentos.index') }}" class="text-decoration-none text-dark">
                     <div class="card-body text-center">
-                        <i class="fas fa-cogs icon-card"></i>
-                        <h5 class="card-title text-muted">Equipamentos Totais</h5>
-                        <p class="card-text fs-1 fw-bold text-dark">{{ $totalEquipamentos }}</p>
+                        <div class="mb-2">
+                            <!-- Ícone de equipamentos com cor azul e tamanho ajustado -->
+                            <i class="fas fa-cogs fa-2x text-primary"></i>
+                        </div>
+                        <h5 class="card-title text-uppercase text-muted fw-semibold">Equipamentos Totais</h5>
+                        <p class="card-text fs-1 fw-bold">{{ $totalEquipamentos }}</p>
                     </div>
                 </a>
             </div>
         </div>
+
+
 
         <!-- Cartão de Usuários Cadastrados -->
-        <div class="col">
-            <div class="card animated-card card-hover">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100 animated-card card-hover">
                 <!-- Link que cobre todo o cartão -->
-                <a href="{{ route('usuarios.index') }}" class="no-style-link">
+                <a href="{{ route('usuarios.index') }}" class="text-decoration-none text-dark">
                     <div class="card-body text-center">
-                        <i class="fas fa-users icon-card"></i>
-                        <h5 class="card-title text-muted">Usuários Cadastrados</h5>
-                        <p class="card-text fs-1 fw-bold text-dark">{{ $totalUsuarios }}</p>
+                        <div class="mb-2">
+                            <i class="fas fa-users fa-2x text-primary"></i> <!-- Ícone de usuários, com cor azul -->
+                        </div>
+                        <h5 class="card-title text-uppercase text-muted fw-semibold">Usuários Cadastrados</h5>
+                        <p class="card-text fs-1 fw-bold">{{ $totalUsuarios }}</p>
                     </div>
                 </a>
             </div>
         </div>
+
+
 
         <!-- Cartão de Empréstimos Totais -->
-        <div class="col">
-            <div class="card animated-card card-hover">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100 animated-card card-hover">
                 <!-- Link que cobre todo o cartão -->
-                <a href="{{ route('emprestimos.index') }}" class="no-style-link">
+                <a href="{{ route('emprestimos.index') }}" class="text-decoration-none text-dark">
                     <div class="card-body text-center">
-                        <i class="fas fa-tools me-2"></i>
-                        <h5 class="card-title text-muted">Empréstimos Totais</h5>
-                        <p class="card-text fs-1 fw-bold text-dark">{{ $totalEmprestimos }}</p>
+                        <div class="mb-2">
+                            <i class="fas fa-clipboard-list fa-2x text-primary"></i> <!-- Ícone de lista, mais adequado para empréstimos -->
+                        </div>
+                        <h5 class="card-title text-uppercase text-muted fw-semibold">Empréstimos Totais</h5>
+                        <p class="card-text fs-1 fw-bold">{{ $totalEmprestimos }}</p>
                     </div>
                 </a>
             </div>
         </div>
 
-        <!-- Cartão de Empréstimos Ativos -->
-        <div class="col">
-            <div class="card animated-card card-hover">
-                <!-- Link que cobre todo o cartão -->
-                <a href="{{ route('emprestimos.index') }}" class="no-style-link">
+
+        <!-- Cartão de Equipamentos em Manutenção -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100 animated-card card-hover">
+                <a href="{{ route('manutencao.index') }}" class="text-decoration-none text-dark">
                     <div class="card-body text-center">
-                        <i class="fas fa-sync-alt icon-card"></i>
-                        <h5 class="card-title text-muted">Empréstimos Ativos</h5>
-                        <p class="card-text fs-1 fw-bold text-dark">{{ $totalEmprestimosAtivos }}</p>
+                        <div class="mb-2">
+                            <i class="fas fa-tools fa-2x text-primary"></i> <!-- Ícone azul -->
+                        </div>
+                        <h5 class="card-title text-uppercase text-muted fw-semibold">Equipamentos em Manutenção</h5>
+                        <p class="card-text fs-1 fw-bold">{{ $totalManutencoesAtivas }}</p>
                     </div>
                 </a>
             </div>

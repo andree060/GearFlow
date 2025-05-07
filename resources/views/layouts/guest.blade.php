@@ -18,7 +18,7 @@
 
     <!-- Cabeçalho -->
     <div class="bg-blue-600 text-white text-center py-6 shadow-xl">
-        <h1 class="text-3xl font-semibold">Sistema de Empréstimos de Equipamentos</h1>
+        <h1 class="text-3xl font-semibold">Sistema de Gestão de Empréstimos de Equipamentos</h1>
         <p class="text-lg mt-2">Gerencie seus empréstimos de forma rápida e fácil</p>
     </div>
 

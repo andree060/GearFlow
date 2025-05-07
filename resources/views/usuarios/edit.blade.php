@@ -50,7 +50,11 @@
                     <!-- Botões de Ação -->
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-primary">Atualizar</button>
-                        <a href="{{ route('usuarios.show', $usuario->id) }}" class="btn btn-secondary" onclick="return confirmCancel()">Cancelar</a>
+
+                        <!-- Link de Cancelar com confirmação -->
+                        <a href="{{ route('usuarios.show', $usuario->id) }}" class="btn btn-secondary" onclick="return confirmCancel()">
+                            Cancelar
+                        </a>
                     </div>
                 </form>
             </div>

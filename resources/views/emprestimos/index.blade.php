@@ -14,7 +14,7 @@
             <table class="table table-bordered table-striped table-hover shadow-sm rounded-3">
                 <thead class="table-dark">
                     <tr>
-                        <th>ID</th> <!-- Adicionei esta coluna -->
+                        <th>ID</th>
                         <th>Equipamento</th>
                         <th>Usuário</th>
                         <th>Data Empréstimo</th>
@@ -26,7 +26,7 @@
                 <tbody>
                     @foreach($emprestimos as $emprestimo)
                         <tr class="table-row">
-                            <td class="align-middle">{{ $emprestimo->id }}</td> <!-- Exibe o ID do empréstimo -->
+                            <td class="align-middle">{{ $emprestimo->id }}</td>
                             <td class="align-middle">
                                 @if($emprestimo->equipamento)
                                     {{ $emprestimo->equipamento->nome }}
@@ -55,29 +55,28 @@
                                 @endif
                             </td>
                             <td class="align-middle">
-                                <div class="d-flex flex-column gap-2">
-                                    <a href="{{ route('emprestimos.show', $emprestimo->id) }}" class="btn btn-info w-100 shadow-sm rounded-pill text-white">
-                                        <i class="fas fa-eye"></i> Visualizar
+                                <div class="d-flex gap-1 flex-wrap">
+                                    <a href="{{ route('emprestimos.show', $emprestimo->id) }}" class="btn btn-info btn-sm shadow-sm rounded-pill text-white" title="Visualizar">
+                                        <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('emprestimos.edit', $emprestimo->id) }}" class="btn btn-warning w-100 shadow-sm rounded-pill text-white">
-                                        <i class="fas fa-edit"></i> Editar
+                                    <a href="{{ route('emprestimos.edit', $emprestimo->id) }}" class="btn btn-warning btn-sm shadow-sm rounded-pill text-white" title="Editar">
+                                        <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('emprestimos.destroy', $emprestimo->id) }}" method="POST" class="delete-form">
+                                    <form action="{{ route('emprestimos.destroy', $emprestimo->id) }}" method="POST" class="delete-form d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger w-100 shadow-sm rounded-pill text-white">
-                                            <i class="fas fa-trash-alt"></i> Excluir
+                                        <button type="submit" class="btn btn-danger btn-sm shadow-sm rounded-pill text-white" title="Excluir">
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
 
-                                    <!-- Botão Devolver Equipamento -->
                                     @if(!$emprestimo->data_devolucao)
-                                        <form action="{{ route('emprestimos.update', $emprestimo->id) }}" method="POST" class="devolver-form">
+                                        <form action="{{ route('emprestimos.update', $emprestimo->id) }}" method="POST" class="devolver-form d-inline">
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="devolver" value="true">
-                                            <button type="submit" class="btn btn-primary w-100 shadow-sm rounded-pill text-white">
-                                                <i class="fas fa-undo"></i> Devolver Equipamento
+                                            <button type="submit" class="btn btn-primary btn-sm shadow-sm rounded-pill text-white" title="Devolver">
+                                                <i class="fas fa-undo"></i>
                                             </button>
                                         </form>
                                     @endif
@@ -89,7 +88,7 @@
             </table>
         </div>
 
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end mt-3">
             <a href="{{ route('home.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill" style="background-color: #6c757d; color: white;">
                 <i class="fas fa-arrow-left"></i> Voltar
             </a>
@@ -112,7 +111,7 @@
         // Confirma a exclusão antes de enviar o formulário
         document.querySelectorAll('.delete-form').forEach(form => {
             form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Impede o envio imediato
+                event.preventDefault();
 
                 if (confirm('Tem certeza que deseja excluir este empréstimo?')) {
                     this.submit();
@@ -124,7 +123,7 @@
         // Confirma a devolução antes de enviar o formulário
         document.querySelectorAll('.devolver-form').forEach(form => {
             form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Impede o envio imediato
+                event.preventDefault();
 
                 if (confirm('Tem certeza que deseja devolver este equipamento?')) {
                     this.submit();

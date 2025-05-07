@@ -43,18 +43,18 @@
                                 </span>
                             </td>
                             <td class="align-middle">
-                                <div class="d-flex flex-column gap-2">
-                                    <a href="{{ route('equipamentos.show', $equipamento->id) }}" class="btn btn-info w-100 shadow-sm rounded-pill text-white">
-                                        <i class="fas fa-eye"></i> Visualizar
+                                <div class="d-flex gap-1 flex-wrap">
+                                    <a href="{{ route('equipamentos.show', $equipamento->id) }}" class="btn btn-info btn-sm shadow-sm rounded-pill text-white" title="Visualizar">
+                                        <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('equipamentos.edit', $equipamento->id) }}" class="btn btn-warning w-100 shadow-sm rounded-pill text-white" onclick="return confirmEdit()">
-                                        <i class="fas fa-edit"></i> Editar
+                                    <a href="{{ route('equipamentos.edit', $equipamento->id) }}" class="btn btn-warning btn-sm shadow-sm rounded-pill text-white" onclick="return confirmEdit()" title="Editar">
+                                        <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('equipamentos.destroy', $equipamento->id) }}" method="POST" class="d-inline" onsubmit="return confirmDelete()">
+                                    <form action="{{ route('equipamentos.destroy', $equipamento->id) }}" method="POST" onsubmit="return confirmDelete()" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger w-100 shadow-sm rounded-pill text-white">
-                                            <i class="fas fa-trash-alt"></i> Excluir
+                                        <button type="submit" class="btn btn-danger btn-sm shadow-sm rounded-pill text-white" title="Excluir">
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
                                 </div>

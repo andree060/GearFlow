@@ -40,40 +40,41 @@
                             <td class="align-middle">{{ $manutencaos->responsavel }}</td>
                             <td class="align-middle">{{ $manutencaos->status }}</td>
                             <td class="align-middle">
-                                <div class="d-flex flex-column gap-2">
+                                <div class="d-flex gap-1 flex-wrap">
+
                                     <!-- Botão Visualizar -->
-                                    <a href="{{ route('manutencao.show', $manutencaos->id) }}" class="btn btn-info w-100 shadow-sm rounded-pill text-white">
-                                        <i class="fas fa-eye"></i> Visualizar
+                                    <a href="{{ route('manutencao.show', $manutencaos->id) }}" class="btn btn-info btn-sm shadow-sm rounded-pill text-white" title="Visualizar">
+                                        <i class="fas fa-eye"></i>
                                     </a>
 
-                                    <!-- Botão Marcar como Funcionando -->
+                                    <!-- Botão Marcar como Concluída -->
                                     @if($manutencaos->status != 'Manutenção Concluida')
-                                        <form action="{{ route('manutencao.update', $manutencaos->id) }}" method="POST" style="display:inline;" onsubmit="return confirmMarkAsWorking()">
+                                        <form action="{{ route('manutencao.update', $manutencaos->id) }}" method="POST" class="d-inline" onsubmit="return confirmMarkAsWorking()">
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="equipamento_id" value="{{ $manutencaos->equipamento_id }}">
                                             <input type="hidden" name="data_manutencao" value="{{ $manutencaos->data_manutencao }}">
                                             <input type="hidden" name="descricao" value="{{ $manutencaos->descricao }}">
                                             <input type="hidden" name="responsavel" value="{{ $manutencaos->responsavel }}">
-                                            <input type="hidden" name="status" value="Manutenção Concluida"> <!-- Alterando o status -->
+                                            <input type="hidden" name="status" value="Manutenção Concluida">
                                             <input type="hidden" name="proxima_manutencao" value="{{ $manutencaos->proxima_manutencao }}">
-                                            <button type="submit" class="btn btn-success w-100 shadow-sm rounded-pill text-white">
-                                                <i class="fas fa-check"></i>Manutenção Concluida
+                                            <button type="submit" class="btn btn-success btn-sm shadow-sm rounded-pill text-white" title="Marcar como concluída">
+                                                <i class="fas fa-check"></i>
                                             </button>
                                         </form>
                                     @endif
 
                                     <!-- Botão Editar -->
-                                    <a href="{{ route('manutencao.edit', $manutencaos->id) }}" class="btn btn-warning w-100 shadow-sm rounded-pill text-white" onclick="return confirmEdit()">
-                                        <i class="fas fa-edit"></i> Editar
+                                    <a href="{{ route('manutencao.edit', $manutencaos->id) }}" class="btn btn-warning btn-sm shadow-sm rounded-pill text-white" onclick="return confirmEdit()" title="Editar">
+                                        <i class="fas fa-edit"></i>
                                     </a>
 
                                     <!-- Formulário Excluir -->
-                                    <form action="{{ route('manutencao.destroy', $manutencaos->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete()">
+                                    <form action="{{ route('manutencao.destroy', $manutencaos->id) }}" method="POST" class="d-inline" onsubmit="return confirmDelete()">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger w-100 shadow-sm rounded-pill text-white">
-                                            <i class="fas fa-trash-alt"></i> Excluir
+                                        <button type="submit" class="btn btn-danger btn-sm shadow-sm rounded-pill text-white" title="Excluir">
+                                            <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -96,21 +97,18 @@
 @endsection
 
 @section('scripts')
-    <!-- Adicionando o script JavaScript para confirmação -->
+    <!-- Scripts de confirmação -->
     <script>
-        // Função para confirmar a exclusão de uma Manutenção
         function confirmDelete() {
             return confirm('Tem certeza que deseja excluir esta manutenção?');
         }
 
-        // Função para confirmar se o usuário deseja editar a Manutenção
         function confirmEdit() {
             return confirm('Tem certeza que deseja editar esta manutenção?');
         }
 
-        // Função para confirmar a marcação como "Funcionando"
         function confirmMarkAsWorking() {
-            return confirm('Tem certeza que deseja marcar esta manutenção como Concluida?');
+            return confirm('Tem certeza que deseja marcar esta manutenção como Concluída?');
         }
     </script>
 @endsection
