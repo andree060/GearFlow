@@ -59,7 +59,7 @@
                 </tr>
             </table>
 
-            <div class="d-flex justify-content-start gap-2 mt-4">
+            <div class="d-flex justify-content-between mt-4">
                 <!-- Botões Editar e Voltar -->
                 <a href="{{ route('emprestimos.edit', $emprestimo->id) }}"
                     class="btn btn-warning w-auto shadow-sm rounded-pill text-white">

@@ -45,7 +45,7 @@
             </table>
 
             <!-- Ações -->
-            <div class="d-flex justify-content-start gap-2 mt-4">
+            <div class="d-flex justify-content-between mt-4">
                 <a href="{{ route('equipamentos.edit', $equipamento->id) }}"
                     class="btn btn-warning text-white rounded-pill px-4 shadow-sm">
                     <i class="fas fa-edit me-1"></i> Editar

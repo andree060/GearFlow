@@ -35,13 +35,12 @@
             </table>
 
             <!-- Botões de ação -->
-            <div class="d-flex justify-content-start gap-2 mt-4">
+            <div class="d-flex justify-content-between mt-4">
                 <!-- Botão Editar -->
                 <a href="{{ route('usuarios.edit', $usuario->id) }}"
                     class="btn btn-warning w-auto shadow-sm rounded-pill text-white">
                     <i class="fas fa-edit me-1"></i> Editar
                 </a>
-
                 <!-- Botão Voltar -->
                 <a href="{{ route('usuarios.index') }}" class="btn btn-secondary w-auto shadow-sm rounded-pill">
                     <i class="fas fa-arrow-left me-1"></i> Voltar
