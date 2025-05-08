@@ -23,6 +23,8 @@
                     <th>Nome</th>
                     <th>Número de Série</th>
                     <th>Status</th>
+                    <th>Categoria</th>
+                    <th>Setor</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -49,6 +51,14 @@
                             <i class="fas fa-times-circle"></i> Indisponível
                             @endif
                         </span>
+                    </td>
+                    <td class="align-middle text-truncate" style="max-width: 150px;"
+                        title="{{ $equipamento->categoria->nome ?? 'Não definida' }}">
+                        {{ $equipamento->categoria->nome ?? 'Não definida' }}
+                    </td>
+                    <td class="align-middle text-truncate" style="max-width: 150px;"
+                        title="{{ $equipamento->setor->nome ?? 'Não definido' }}">
+                        {{ $equipamento->setor->nome ?? 'Não definido' }}
                     </td>
                     <td class="align-middle text-center">
                         <div class="d-flex justify-content-center gap-1 flex-wrap">
