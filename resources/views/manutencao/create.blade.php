@@ -33,9 +33,14 @@
                     </div>
                     <select name="equipamento_id" id="equipamento_id" class="form-control shadow-sm rounded" required>
                         @foreach ($equipamentos as $equipamento)
-                        <option value="{{ $equipamento->id }}">{{ $equipamento->nome }}</option>
+                        <option value="{{ $equipamento->id }}">
+                            {{ $equipamento->nome }} ({{ ucfirst($equipamento->status) }})
+                        </option>
                         @endforeach
                     </select>
+                    @if ($errors->has('equipamento_id'))
+                    <small class="text-danger">{{ $errors->first('equipamento_id') }}</small>
+                    @endif
                 </div>
 
                 <!-- Descrição -->
@@ -87,12 +92,14 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <div class="text-start">
-                            <label for="custo" class="form-label fw-semibold">Custo</label>
+                            <label for="custo_mascarado" class="form-label fw-semibold">Custo</label>
                         </div>
-                        <input type="text" name="custo" id="custo" class="form-control shadow-sm rounded"
+                        <input type="text" id="custo_mascarado" class="form-control shadow-sm rounded"
                             placeholder="R$ 0,00" required>
+                        <input type="hidden" name="custo" id="custo_real">
                     </div>
                 </div>
+
 
                 <!-- Botões -->
                 <div class="d-flex justify-content-between mt-4">
@@ -114,7 +121,30 @@
 
 @section('scripts')
 <script>
-// Função para confirmar o cancelamento do formulário
+document.addEventListener('DOMContentLoaded', function() {
+    const inputVisivel = document.getElementById('custo_mascarado');
+    const inputReal = document.getElementById('custo_real');
+
+    inputVisivel.addEventListener('input', function() {
+        let rawValue = inputVisivel.value.replace(/\D/g, '');
+
+        if (rawValue.length === 0) {
+            inputVisivel.value = '';
+            inputReal.value = '';
+            return;
+        }
+
+        let valor = (parseInt(rawValue, 10) / 100).toFixed(2);
+        let valorFormatado = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(valor);
+
+        inputVisivel.value = valorFormatado;
+        inputReal.value = valor;
+    });
+});
+
 function confirmCancel() {
     return confirm('Tem certeza que deseja cancelar? As alterações não serão salvas.');
 }

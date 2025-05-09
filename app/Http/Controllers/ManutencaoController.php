@@ -39,10 +39,17 @@ class ManutencaoController extends Controller
             'data_manutencao' => 'required|date',
             'descricao' => 'required|string',
             'responsavel' => 'required|string',
-            'status' => 'required|string',  // Validar o status (Em Manutenção ou Funcionando)
-            'custo' => 'nullable|numeric',  // Custo opcional
-            'proxima_manutencao' => 'nullable|date',  // Data opcional
+            'status' => 'required|string',
+            'custo' => 'nullable|numeric',
+            'proxima_manutencao' => 'nullable|date',
         ]);
+
+        // Verifica o status do equipamento
+        $equipamento = Equipamentos::findOrFail($request->equipamento_id);
+
+        if ($equipamento->status === 'emprestado') {
+            return redirect()->back()->withErrors('O equipamento está emprestado. A manutenção só pode ser iniciada após o término do empréstimo.');
+        }
 
         // Criação da manutenção
         $manutencao = new Manutencao;
@@ -50,14 +57,21 @@ class ManutencaoController extends Controller
         $manutencao->data_manutencao = $request->data_manutencao;
         $manutencao->descricao = $request->descricao;
         $manutencao->responsavel = $request->responsavel;
-        $manutencao->status = $request->status;  // Usando o status escolhido pelo usuário
-        $manutencao->custo = $request->custo ?? null;  // Se custo não for fornecido, será null
-        $manutencao->proxima_manutencao = $request->proxima_manutencao ?? null;  // Se próxima manutenção não for fornecida, será null
+        $manutencao->status = $request->status;
+        $manutencao->custo = $request->custo ?? null;
+        $manutencao->proxima_manutencao = $request->proxima_manutencao ?? null;
+
+        // Atualiza o status do equipamento com base no status da manutenção
+        if ($request->status === 'Manutenção Concluida') {
+            $equipamento->status = 'disponível';
+        } elseif ($request->data_manutencao <= date('Y-m-d')) {
+            $equipamento->status = 'indisponível';
+        }
+        $equipamento->save();
 
         // Salva a manutenção no banco de dados
         $manutencao->save();
 
-        // Redireciona com uma mensagem de sucesso
         return redirect()->route('manutencao.index')->with('success', 'Manutenção registrada com sucesso!');
     }
 
@@ -93,11 +107,12 @@ class ManutencaoController extends Controller
             'data_manutencao' => 'required|date',
             'descricao' => 'required|string',
             'responsavel' => 'required|string',
-            'status' => 'required|string', // Validar o status como string
+            'status' => 'required|string',
         ]);
 
         // Encontra a manutenção pelo id
         $manutencao = Manutencao::findOrFail($id);
+        $equipamento = Equipamentos::findOrFail($request->equipamento_id);
 
         // Atualiza a manutenção com os novos dados
         $manutencao->update([
@@ -105,17 +120,21 @@ class ManutencaoController extends Controller
             'data_manutencao' => $request->data_manutencao,
             'descricao' => $request->descricao,
             'responsavel' => $request->responsavel,
-            'status' => $request->status,  // O status será alterado para o valor selecionado no formulário
-            'custo' => $request->custo ?? null,  // Se o custo não for alterado, mantém o valor atual
-            'proxima_manutencao' => $request->proxima_manutencao ?? null, // Se a data da próxima manutenção não for fornecida, será null
+            'status' => $request->status,
+            'custo' => $request->custo ?? null,
+            'proxima_manutencao' => $request->proxima_manutencao ?? null,
         ]);
+
+        // Atualiza o status do equipamento com base no status da manutenção
+        if ($request->status === 'Manutenção Concluida') {
+            $equipamento->status = 'disponível';
+        } elseif ($request->status === 'Em Manutenção' && $request->data_manutencao <= date('Y-m-d')) {
+            $equipamento->status = 'indisponível';
+        }
+        $equipamento->save();
 
         return redirect()->route('manutencao.index')->with('success', 'Manutenção atualizada com sucesso!');
     }
-
-
-
-
 
     /**
      * Remove the specified resource from storage.

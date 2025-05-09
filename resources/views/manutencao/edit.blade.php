@@ -91,10 +91,11 @@
 
                     <div class="col-md-6">
                         <div class="text-start">
-                            <label for="custo" class="form-label fw-semibold">Custo</label>
+                            <label for="custo_mascarado" class="form-label fw-semibold">Custo</label>
                         </div>
-                        <input type="text" name="custo" id="custo" class="form-control shadow-sm rounded"
-                            value="{{ $manutencao->custo }}">
+                        <input type="text" id="custo_mascarado" class="form-control shadow-sm rounded"
+                            placeholder="R$ 0,00" required>
+                        <input type="hidden" name="custo" id="custo_real" value="{{ $manutencao->custo }}">
                     </div>
                 </div>
 
@@ -127,4 +128,41 @@
     </div>
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const inputVisivel = document.getElementById('custo_mascarado');
+    const inputReal = document.getElementById('custo_real');
+
+    // Formata o valor já existente
+    if (inputReal.value) {
+        let valor = parseFloat(inputReal.value).toFixed(2);
+        inputVisivel.value = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(valor);
+    }
+
+    inputVisivel.addEventListener('input', function() {
+        let rawValue = inputVisivel.value.replace(/\D/g, '');
+
+        if (rawValue.length === 0) {
+            inputVisivel.value = '';
+            inputReal.value = '';
+            return;
+        }
+
+        let valor = (parseInt(rawValue, 10) / 100).toFixed(2);
+        let valorFormatado = new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(valor);
+
+        inputVisivel.value = valorFormatado;
+        inputReal.value = valor;
+    });
+});
+</script>
 @endsection
