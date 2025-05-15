@@ -14,13 +14,20 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans text-gray-900 antialiased bg-blue-50">
 
-    <!-- Cabeçalho -->
-    <div class="bg-blue-600 text-white text-center py-6 shadow-xl">
-        <h1 class="text-3xl font-semibold">Sistema de Gestão de Empréstimos de Equipamentos</h1>
-        <p class="text-lg mt-2">Gerencie seus empréstimos de forma rápida e fácil</p>
+    <!-- Top header -->
+    <div class="top-header">
+        <div class="header-content">
+            <img src="{{ asset('storage/imagem/logo2.png') }}" alt="Logo" class="logo_1">
+            <div class="titulo-centralizado">
+                <h1 class="text-3xl font-semibold">Equipia</h1>
+                <p class="text-lg mt-2">Controle inteligente dos seus equipamentos</p>
+            </div>
+        </div>
     </div>
+
+
+
 
     <!-- Conteúdo -->
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-blue-50">
@@ -39,7 +46,7 @@
 
     /* Cabeçalho estilizado */
     .bg-blue-600 {
-        background-color: #3182ce !important; /* Azul vibrante */
+        background-color: #003366 !important; /* Azul vibrante */
         color: white !important;
         padding: 12px 20px;
         border: none;
@@ -49,11 +56,41 @@
         transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .bg-blue-600:hover {
-        background-color: #3182ce !important;
-        color: white !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    .top-header {
+    background-color: #003366;
+    color: white;
+    padding: 20px 0;
+    border-bottom: 2px solid #00aaff;
+    position: relative;
+    z-index: 100;
     }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .logo_1 {
+        height: 80px; /* Ajuste conforme o tamanho desejado da logo */
+        width: auto;
+    }
+
+    .logo {
+    height: 80px; /* ou outro valor desejado */
+    width: auto;
+    }
+
+
+    .titulo-centralizado {
+        text-align: left;
+    }
+
+
 
     /* Texto do cabeçalho */
     h1 {

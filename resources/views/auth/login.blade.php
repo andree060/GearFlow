@@ -3,10 +3,12 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <!-- Título do cabeçalho -->
-    <div class="bg-blue-600 text-white text-center py-6 mb-5 rounded-lg shadow-lg">
-        <h1 class="text-3xl font-semibold">Sistema de Empréstimos</h1>
-        <p class="text-lg">Acesse sua conta para gerenciar empréstimos de equipamentos</p>
+    <div class="header bg-blue-600 text-white py-6 mb-5 rounded-lg shadow-lg relative flex justify-center items-center space-x-4">
+        <img src="{{ asset('storage/imagem/logo2.png') }}" alt="Logo" class="logo">
+        <h1 class="header-title text-2xl font-semibold">Inicie sessão</h1>
     </div>
+
+
 
     <!-- Formulário de login -->
     <form method="POST" action="{{ route('login') }}" class="bg-white p-8 shadow-2xl rounded-lg max-w-md mx-auto mt-6">

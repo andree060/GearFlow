@@ -39,7 +39,7 @@
             height: auto;
         }
         .navbar-custom {
-            background-color: #0d6efd;
+            background-color: #003366;
         }
         .navbar-custom .navbar-brand, .navbar-custom .nav-link {
             color: white !important;
@@ -48,21 +48,21 @@
             color: #f8f9fa !important;
         }
         .btn-custom {
-            background-color: #0d6efd;
+            background-color: #003366;
             color: white;
             border-radius: 30px;
             font-weight: bold;
             transition: background-color 0.3s;
         }
         .btn-custom:hover {
-            background-color: #0056b3;
+            background-color: #003366;
         }
         .footer {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: #0d6efd;
+            background-color: #003366;
             color: white;
             text-align: center;
             padding: 20px 0;

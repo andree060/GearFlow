@@ -340,7 +340,7 @@
     <div class="top-header">
         <img src="{{ asset('storage/imagem/logo2.png') }}" alt="Logo">
         <div class="titulo-centralizado">
-            Sistema de Gestão de Empréstimos de Equipamentos
+            Sistema de Gestão de Equipamentos e Empréstimos
         </div>
     </div>
 
