@@ -147,7 +147,6 @@
                                             {{ $equipamento->nome }}
                                             <span class="badge
                                                 @if($equipamento->status == 'disponível') bg-success
-
                                                 @elseif($equipamento->status == 'indisponível') bg-danger
                                                 @elseif($equipamento->status == 'em manutenção') bg-secondary
                                                 @elseif($equipamento->status == 'Manutenção Concluida') bg-info
@@ -214,7 +213,6 @@
             datasets: [{
                 data: [
                     {{ $totalEquipamentosDisponiveis }},
-                    {{ $totalEquipamentosIndisponiveis }},
                     {{ $totalEquipamentosIndisponiveis }},
                     {{ $totalEquipamentosDevolvidos }},
                     {{ $totalEquipamentosEmManutencao }},
